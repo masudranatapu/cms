@@ -6,6 +6,9 @@ use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BlogPostController;
 use App\Models\BlogCategory;
+use App\Http\Controllers\NewsLetterController;
+use App\Http\Controllers\BrandController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +31,9 @@ Route::get('admin/logout', [AdminLoginController::class, 'logout'])->name('admin
 
 
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth:admin'], 'where' => ['locale' => '[a-zA-Z]{2}']], function () {
+    
+Route::get('/view',[NewsLetterController::class,'index'])->name('newsletter.list');
+Route::get('/index',[BrandController::class,'view'])->name('brand.index');
 
 
     Route::get('/', ['as' => 'dashboard', 'uses' => 'DashboardController@dashboard']);

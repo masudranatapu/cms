@@ -1,5 +1,5 @@
 @php
-$settings = DB::table('settings')->first();
+    $settings = DB::table('settings')->first();
 @endphp
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -92,6 +92,48 @@ $settings = DB::table('settings')->first();
                         {{ __('Custom page') }}
                     </a>
                 </li>
+
+                {{-- <li class="nav-item">
+                    <a href="{{ route('admin.cpage.index') }}"
+                        class="nav-link {{ Request::routeIs('admin.cpage.index') ? 'active' : '' }} @yield('cpage_create')">
+                        <i class=" fa fa-award"></i>
+                        {{ __('Brand') }}
+                    </a>
+                </li> --}}
+                <li class="nav-item">
+                    <a href="{{ route('admin.brand.index') }}" class="nav-link ">
+                        <i class=" fa fa-award"></i>
+                        {{ __('Brand') }}
+                    </a>
+                </li>
+
+
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon far fa-envelope"></i>
+                        <p>
+                            Newsletter
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('admin.newsletter.list') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Email List</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Send Mail</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
                 <li class="nav-item">
                     <a href="{{ route('admin.user.index') }}"
                         class="nav-link {{ Request::routeIs('admin.user.index') ? 'active' : '' }}">
@@ -99,17 +141,59 @@ $settings = DB::table('settings')->first();
                         {{ __('User') }}
                     </a>
                 </li>
+
+
+
+
+
+
                 <li class="nav-item">
                     <a href="{{ route('admin.settings') }}" class="nav-link @yield('settings')">
                         <i class="fa fa-gear"></i>
                         {{ __('Settings') }}
+
                     </a>
+
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="pages/mailbox/mailbox.html" class="nav-link">
+                                <i class="fas fa-cog nav-icon"></i>
+                                <p>General Settings</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pages/mailbox/compose.html" class="nav-link">
+                                <i class="fas fa-globe nav-icon"></i>
+                                <p>Language</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pages/mailbox/compose.html" class="nav-link">
+                                <i class="fas fa-envelope nav-icon"></i>
+                                <p>SMTP</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pages/mailbox/compose.html" class="nav-link">
+                                <i class="fas fa-dollar-sign nav-icon"></i>
+                                <p>Currency</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pages/mailbox/compose.html" class="nav-link">
+                                <i class="fas fa-mobile nav-icon"></i>
+                                <p>Mobile App Config</p>
+                            </a>
+                        </li>
+
+                    </ul>
                 </li>
                 <li class="nav-item"><a href="{{ route('admin.user.index') }}" class="nav-link @yield('admin-user')"><i
-                    class=" fa fa-book"></i> {{ __('Admin User & Role') }}</a></li>
+                            class=" fa fa-book"></i> {{ __('Admin User & Role') }}</a></li>
 
-                <li class="nav-item"><a href="{{ route('admin.roles.index') }}" class="nav-link @yield('admin-roles')"><i
-                            class=" fa fa-book"></i> {{ __('Admin Roles') }}</a></li>
+                <li class="nav-item"><a href="{{ route('admin.roles.index') }}"
+                        class="nav-link @yield('admin-roles')"><i class=" fa fa-book"></i> {{ __('Admin Roles') }}</a>
+                </li>
 
                 <li class="nav-item"><a href="{{ route('admin.permissions.index') }}"
                         class="nav-link @yield('admin-permissions')"><i class=" fa fa-book"></i>
