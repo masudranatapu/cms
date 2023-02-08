@@ -162,7 +162,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="pages/mailbox/compose.html" class="nav-link">
+                            <a href="{{ route('admin.settings.Language.index') }}" class="nav-link">
                                 <i class="fas fa-globe nav-icon"></i>
                                 <p>Language</p>
                             </a>
@@ -174,13 +174,13 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="pages/mailbox/compose.html" class="nav-link">
+                            <a href="{{ route('admin.settings.Currency.index') }}" class="nav-link">
                                 <i class="fas fa-dollar-sign nav-icon"></i>
                                 <p>Currency</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="pages/mailbox/compose.html" class="nav-link">
+                            <a href="{{ route('admin.settings.MobileApp.index') }}" class="nav-link">
                                 <i class="fas fa-mobile nav-icon"></i>
                                 <p>Mobile App Config</p>
                             </a>

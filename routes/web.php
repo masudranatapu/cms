@@ -9,7 +9,7 @@ use App\Http\Controllers\PhotoController;
 // user
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\User\UserDashboardController;
-use App\Http\Controllers\BrandController;
+
 
 /*
 |--------------------------------------------------------------------------

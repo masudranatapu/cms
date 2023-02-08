@@ -8,7 +8,9 @@ use App\Http\Controllers\Admin\BlogPostController;
 use App\Models\BlogCategory;
 use App\Http\Controllers\NewsLetterController;
 use App\Http\Controllers\BrandController;
-
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\LanguageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +36,10 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'mi
     
 Route::get('/view',[NewsLetterController::class,'index'])->name('newsletter.list');
 Route::get('/index',[BrandController::class,'view'])->name('brand.index');
+Route::get('/sc',[SettingsController::class,'setview'])->name('settings.MobileApp.index');
+Route::get('/currency',[CurrencyController::class,'currenview'])->name('settings.Currency.index');
+Route::get('/languages',[LanguageController::class,'index'])->name('settings.Language.index');
+
 
 
     Route::get('/', ['as' => 'dashboard', 'uses' => 'DashboardController@dashboard']);
