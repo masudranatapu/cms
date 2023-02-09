@@ -11,6 +11,8 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\GeneralController;
+use App\Http\Controllers\MailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,16 +35,22 @@ Route::get('admin/logout', [AdminLoginController::class, 'logout'])->name('admin
 
 
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth:admin'], 'where' => ['locale' => '[a-zA-Z]{2}']], function () {
-    
+    // {{--('BRAND')--}}
 Route::get('/view',[NewsLetterController::class,'index'])->name('newsletter.list');
-Route::get('/index',[BrandController::class,'view'])->name('brand.index');
+Route::get('/brand',[BrandController::class,'view'])->name('brand.index');
+Route::get('/add', [BrandController::class, 'create'])->name('brand.create');
+Route::post('/add', [BrandController::class, 'store'])->name('brand.store');
+
+
 Route::get('/sc',[SettingsController::class,'setview'])->name('settings.MobileApp.index');
 Route::get('/currency',[CurrencyController::class,'currenview'])->name('settings.Currency.index');
 Route::get('/languages',[LanguageController::class,'index'])->name('settings.Language.index');
+Route::get('/general',[GeneralController::class,'genview'])->name('settings.General.general');
+Route::get('/smtp',[MailController::class,'mailview'])->name('settings.Smtp.mail');
 
 
 
-    Route::get('/', ['as' => 'dashboard', 'uses' => 'DashboardController@dashboard']);
+    Route::get('/dashboard', ['as' => 'dashboard', 'uses' => 'DashboardController@dashboard']);
     Route::get('/cc', 'DashboardController@cacheClear')->name('cacheClear');
     Route::get('settings', ['as' => 'settings', 'uses' => 'SettingsController@settings']);
 

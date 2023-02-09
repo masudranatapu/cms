@@ -101,7 +101,8 @@
                     </a>
                 </li> --}}
                 <li class="nav-item">
-                    <a href="{{ route('admin.brand.index') }}" class="nav-link ">
+                    <a href="{{ route('admin.brand.index') }}"
+                        class="nav-link {{ Request::is('admin/brand') ? 'active' : '' }}">
                         <i class=" fa fa-award"></i>
                         {{ __('Brand') }}
                     </a>
@@ -109,8 +110,8 @@
 
 
 
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
+                <li class="nav-item {{ Request::is('admin/view') ? 'menu-open' : '' }}">
+                    <a href="javascript:;" class="nav-link ">
                         <i class="nav-icon far fa-envelope"></i>
                         <p>
                             Newsletter
@@ -119,7 +120,8 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('admin.newsletter.list') }}" class="nav-link">
+                            <a href="{{ route('admin.newsletter.list') }}"
+                                class="nav-link {{ Request::is('admin/view') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Email List</p>
                             </a>
@@ -149,38 +151,46 @@
 
                 <li class="nav-item">
                     <a href="{{ route('admin.settings') }}" class="nav-link @yield('settings')">
-                        <i class="fa fa-gear"></i>
-                        {{ __('Settings') }}
-
+                        <i class="nav-icon far fa-envelope"></i>
+                        <p>
+                            Settings
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
                     </a>
 
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="pages/mailbox/mailbox.html" class="nav-link">
+                            <a href="{{ route('admin.settings.General.general') }}"
+                                class="nav-link {{ Request::is('admin/general') ? 'active' : '' }}">
                                 <i class="fas fa-cog nav-icon"></i>
                                 <p>General Settings</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.settings.Language.index') }}" class="nav-link">
+                            <a href="{{ route('admin.settings.Language.index') }}"
+                                class="nav-link
+                                {{ Request::is('admin/languages') ? 'active' : '' }}">
                                 <i class="fas fa-globe nav-icon"></i>
                                 <p>Language</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="pages/mailbox/compose.html" class="nav-link">
+                            <a href="{{ route('admin.settings.Smtp.mail') }}"
+                                class="nav-link {{ Request::is('admin/smtp') ? 'active' : '' }}">
                                 <i class="fas fa-envelope nav-icon"></i>
                                 <p>SMTP</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.settings.Currency.index') }}" class="nav-link">
+                            <a href="{{ route('admin.settings.Currency.index') }}"
+                                class="nav-link {{ Request::is('admin/currency') ? 'active' : '' }}">
                                 <i class="fas fa-dollar-sign nav-icon"></i>
                                 <p>Currency</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.settings.MobileApp.index') }}" class="nav-link">
+                            <a href="{{ route('admin.settings.MobileApp.index') }}"
+                                class="nav-link {{ Request::is('admin/sc') ? 'active' : '' }}">
                                 <i class="fas fa-mobile nav-icon"></i>
                                 <p>Mobile App Config</p>
                             </a>

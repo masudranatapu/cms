@@ -1,55 +1,73 @@
 @extends('admin.layouts.master')
+
 @section('title')
-    {{ __('mobile_app_settings') }}
+    {{ $data['title'] ?? '' }}
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title" style="line-height: 36px;">{{ __('mobile_app_settings') }}</h3>
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">{{ $data['title'] ?? 'Page Header' }}</h1>
                     </div>
-                    <div class="card-body">
-                        <form class="form-horizontal" action="" method="POST">
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Dashboard</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title" style="line-height: 36px;">{{ __('mobile_app_settings') }}</h3>
+                        </div>
+                        <div class="card-body">
+                            <form class="form-horizontal" action="" method="POST">
 
 
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label for="Android Download URL">Android Download URL</label>
-                                        <div class="w-full">
-                                            <input type="text" name="android_download_url" id="name"
-                                                class="form-control @error('android_download_url') is-invalid @enderror"
-                                                value="" placeholder="{{ __('Android Download Link') }}">
-                                            @error('android_download_url')
-                                                <span class="invalid-feedback" role="alert">{{ __($message) }}</span>
-                                            @enderror
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="Android Download URL">Android Download URL</label>
+                                            <div class="w-full">
+                                                <input type="text" name="android_download_url" id="name"
+                                                    class="form-control @error('android_download_url') is-invalid @enderror"
+                                                    value="" placeholder="{{ __('Android Download Link') }}">
+                                                @error('android_download_url')
+                                                    <span class="invalid-feedback" role="alert">{{ __($message) }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="">IOS Download URL</label>
+                                            <div class="w-full">
+                                                <input type="text" name="ios_download_url" id="name"
+                                                    class="form-control @error('ios_download_url') is-invalid @enderror"
+                                                    value="" placeholder="{{ __('IOS Download URL') }}">
+                                                @error('ios_download_url')
+                                                    <span class="invalid-feedback" role="alert">{{ __($message) }}</span>
+                                                @enderror
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label for="">IOS Download URL</label>
-                                        <div class="w-full">
-                                            <input type="text" name="ios_download_url" id="name"
-                                                class="form-control @error('ios_download_url') is-invalid @enderror"
-                                                value="" placeholder="{{ __('IOS Download URL') }}">
-                                            @error('ios_download_url')
-                                                <span class="invalid-feedback" role="alert">{{ __($message) }}</span>
-                                            @enderror
-                                        </div>
-                                    </div>
+                                <div class="form-group text-center">
+                                    <button type="button" class="btn btn-success" style="width: 10rem">
+                                        <i class="fas fa-plus">
+                                            {{ __('update') }}
+                                        </i>
+                                    </button>
                                 </div>
-                            </div>
-                            <div class="form-group text-center">
-                                <button type="button" class="btn btn-success" style="width: 10rem">
-                                    <i class="fas fa-plus">
-                                        {{ __('update') }}
-                                    </i>
-                                </button>
-                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

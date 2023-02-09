@@ -25,7 +25,9 @@
                                         <select name="category_id" class="form-control js-example-basic-single" required>
                                             <option value="">Select Category</option>
                                             @foreach ($categories as $category)
-                                                <option value="{{ $category->id }}" @if($category->id == $brand->category_id) selected @endif>{{ $category->name }}</option>
+                                                <option value="{{ $category->id }}"
+                                                    @if ($category->id == $brand->category_id) selected @endif>{{ $category->name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
