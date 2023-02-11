@@ -39,7 +39,7 @@
                                 </select>
                             </div>
                             <div class="col-auto my-2 py-2 ">
-                                <button type="submit" class="btn btn-primary "
+                                <button type="submit" class="btn btn-success "
                                     style="margin-top:25px">{{ __('save') }}</button>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
                         <div class="card-header">
                             <h3 class="card-title" style="line-height: 36px;">{{ __('language_list') }}</h3>
                             <a href=""
-                                class="btn bg-primary float-right d-flex align-items-center justify-content-center">
+                                class="btn bg-success float-right d-flex align-items-center justify-content-center">
                                 <i class="fas fa-plus"></i>
                                 &nbsp;
                                 {{ __('Add_language') }}

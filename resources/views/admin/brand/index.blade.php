@@ -28,7 +28,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title" style="line-height: 36px;">{{ __('brand_list') }}</h3>
-                                <a href=""
+                                <a href="{{ route('admin.brand.create') }}"
                                     class="btn bg-success float-right d-flex align-items-center justify-content-center">
                                     <i class="fas fa-plus"></i>&nbsp; {{ __('Add_brand') }}
                                 </a>
@@ -46,9 +46,54 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @forelse ($brands as $brand)
+                                            @php
+                                                $category = Category::where('id', $brand->category_id)->first();
+                                            @endphp
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                            </tr>
+                                            <td>
+                                                {{ $category->name ?? '' }}
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('admin.brand.show', $brand->slug) }}">
+                                                    {{ $brand->name }} ({{ $brand->ads_count }})
+
+                                            </td>
+                                            <td>{{ $brand->created_at->diffForHumans() }}</td>
+                                            <td>{{ $brand->updated_at->diffForHumans() }}</td>
+                                            <td class="text-center">
+                                                @if (userCan('brand.update'))
+                                                    <a
+                                                        title="{{ __('edit_brand') }}"href="{{ route('admin.brand.edit', $brand->id) }}"class="btn bg-info mr-1">
+                                                        <i class="fas fa-edit"></i></a>
+                                                @endif
+                                            </td>
+                                            <form action="" method="POST" class="d-inline">
+                                                <button data-toggle="tooltip" data-placement="top"
+                                                    title="{{ __('delete_brand') }} "
+                                                    onclick="return confirm('{{ __('Are you sure want to delete this item?') }}');"class="btn bg-danger"><i
+                                                        class="fas fa-trash"></i></button>
+
+                                            </form>
+
+
+                                        @empty
+                                            <tr>
+                                                <td colspan="10" class="text-center">
+                                                    {{-- <x-not-found word="Brand" route="admin.brand.create" /> --}}
+                                                </td>
+                                            </tr>
+                                        @endforelse
 
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="card-footer">
+                                <div class="d-flex justify-content-center">
+                                    {{ $brands->links() }}
+                                </div>
                             </div>
                         </div>
                     </div>

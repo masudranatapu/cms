@@ -9,13 +9,13 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title" style="line-height: 36px;">{{ __('brand_edit') }}</h3>
-                        <a href="{{ route('module.brand.index') }}"
+                        <a href="{{ route('admin.brand.index') }}"
                             class="btn bg-primary float-right d-flex align-items-center justify-content-center"><i
                                 class="fas fa-arrow-left"></i>&nbsp;{{ __('back') }}</a>
                     </div>
                     <div class="row pt-3 pb-4">
                         <div class="col-md-6 offset-md-3">
-                            <form class="form-horizontal" action="{{ route('module.brand.update', $brand->id) }}"
+                            <form class="form-horizontal" action="{{ route('admin.brand.update', $brand->id) }}"
                                 method="POST">
                                 @method('PUT')
                                 @csrf

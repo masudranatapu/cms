@@ -37,9 +37,15 @@ Route::get('admin/logout', [AdminLoginController::class, 'logout'])->name('admin
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth:admin'], 'where' => ['locale' => '[a-zA-Z]{2}']], function () {
     // {{--('BRAND')--}}
 Route::get('/view',[NewsLetterController::class,'index'])->name('newsletter.list');
+
+
 Route::get('/brand',[BrandController::class,'view'])->name('brand.index');
 Route::get('/add', [BrandController::class, 'create'])->name('brand.create');
 Route::post('/add', [BrandController::class, 'store'])->name('brand.store');
+Route::get('/edit/{brand}', [BrandController::class, 'edit'])->name('admin.brand.edit');
+Route::put('/update/{brand}', [BrandController::class, 'update'])->name('admin.brand.update');
+Route::get('/{brand:slug}/ads', [BrandController::class, 'show'])->name('admin.brand.show');
+Route::delete('/destroy/{brand}', [BrandController::class, 'destroy'])->name('admin.brand.destroy');
 
 
 Route::get('/sc',[SettingsController::class,'setview'])->name('settings.MobileApp.index');
