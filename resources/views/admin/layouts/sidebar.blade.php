@@ -18,34 +18,34 @@
                         {{ __('Dashboard') }}
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="{{ route('admin.industry.index') }}"
                         class="nav-link {{ Request::routeIs('admin.industry.index') ? 'active' : '' }}">
                         <i class="fa fa-building"></i>
                         {{ __('Industry') }}
                     </a>
-                </li>
-                <li class="nav-item">
+                </li> --}}
+                {{-- <li class="nav-item">
                     <a href="{{ route('admin.location.index') }}"
                         class="nav-link {{ Request::routeIs('admin.location.index') ? 'active' : '' }}">
                         <i class="fa fa-location-dot"></i>
                         {{ __('Location') }}
                     </a>
-                </li>
-                <li class="nav-item">
+                </li> --}}
+                {{-- <li class="nav-item">
                     <a href="{{ route('admin.investment.index') }}"
                         class="nav-link {{ Request::routeIs('admin.investment.index') ? 'active' : '' }}">
                         <i class="fa fa-dollar"></i>
                         {{ __('Investment') }}
                     </a>
-                </li>
-                <li class="nav-item">
+                </li> --}}
+                {{-- <li class="nav-item">
                     <a href="{{ route('admin.franchises.index') }}"
                         class="nav-link {{ Request::routeIs('admin.franchises.index') ? 'active' : '' }} @yield('franchises_create')">
                         <i class="fa fa-file"></i>
                         {{ __('All Listing') }}
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item @yield('blogDropdown')">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fa fa-file-pen"></i>
@@ -55,20 +55,26 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview @yield('blockDropdownMenu')" style="display: none;">
+                        @if (Auth::user()->can('admin.blog-category.index'))
                         <li class="nav-item">
-                            <a href="{{ route('admin.blog.category.index') }}"
-                                class="nav-link  {{ Request::routeIs('admin.blog.category.index') ? 'active' : '' }}">
+                            <a href="{{ route('admin.blog-category.index') }}"
+                                class="nav-link  {{ Request::routeIs('admin.blog-category.index') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Blog Category</p>
                             </a>
                         </li>
+                        @endif
+
+                        @if (Auth::user()->can('admin.blog-post.index'))
                         <li class="nav-item">
-                            <a href="{{ route('admin.blog.post.index') }}"
-                                class="nav-link  {{ Request::routeIs('admin.blog.post.index') ? 'active' : '' }} @yield('post_create')">
+                            <a href="{{ route('admin.blog-post.index') }}"
+                                class="nav-link  {{ Request::routeIs('admin.blog-post.index') ? 'active' : '' }} @yield('post_create')">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Blog Post</p>
                             </a>
                         </li>
+                        @endif
+
                     </ul>
                 </li>
                 <li class="nav-item">

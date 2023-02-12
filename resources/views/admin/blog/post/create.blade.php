@@ -12,12 +12,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Posts Create</h1>
+                    <h1 class="m-0">{{ $data['title'] ?? '' }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="">Manage Post</a></li>
-                        <li class="breadcrumb-item active">Posts Create</li>
+                        <li class="breadcrumb-item active">{{ $data['title'] ?? '' }}</li>
                     </ol>
                 </div>
             </div>
@@ -31,18 +31,18 @@
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col-6">
-                                    <h3 class="card-title"> Create Post</h3>
+                                    <h3 class="card-title"> {{ $data['title'] ?? '' }}</h3>
                                 </div>
                                 <div class="col-6">
                                     <div class="float-right">
-                                        <a href="{{ route('admin.blog.post.index') }}" class="btn btn-primary">Back</a>
+                                        <a href="{{ route('admin.blog-post.index') }}" class="btn btn-primary">Back</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="card-body table-responsive p-4">
-                            <form action="{{ route('admin.blog.post.store') }}" method="post" enctype="multipart/form-data">
+                            <form action="{{ route('admin.blog-post.store') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <div class="col-lg-6">
@@ -68,7 +68,7 @@
                                             <label for="category" class="form-lable">Category</label>
                                             <select name="category_id" id="category_id" class="form-control" required>
                                                  <option value="" class="d-none">-- Select Category --</option>
-                                                @foreach($bog_category as $category)
+                                                @foreach($data['bog_category'] as $category)
                                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                                                 @endforeach
                                             </select>

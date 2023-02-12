@@ -17,6 +17,7 @@ class DashboardController extends Controller
 
 
     public function cacheClear(){
+        // \Artisan::call('php artisan cache:forget spatie.permission.cache');
         \Artisan::call('route:clear');
         \Artisan::call('optimize');
         \Artisan::call('optimize:clear');

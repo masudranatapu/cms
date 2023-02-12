@@ -1,4 +1,4 @@
-<form action="{{ route('admin.blog.category.store',$blog_category->id) }}" method="post" enctype="multipart/form-data">
+<form action="{{ route('admin.blog-category.update',$blog_category->id) }}" method="post" enctype="multipart/form-data">
     @csrf
     <div class="form-group">
         <label for="name" class="form-label">Category Name</label>

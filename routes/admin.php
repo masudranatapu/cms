@@ -56,7 +56,7 @@ Route::get('/smtp',[MailController::class,'mailview'])->name('settings.Smtp.mail
 
 
 
-    Route::get('/dashboard', ['as' => 'dashboard', 'uses' => 'DashboardController@dashboard']);
+    Route::get('/', ['as' => 'dashboard', 'uses' => 'DashboardController@dashboard']);
     Route::get('/cc', 'DashboardController@cacheClear')->name('cacheClear');
     Route::get('settings', ['as' => 'settings', 'uses' => 'SettingsController@settings']);
 
@@ -209,22 +209,22 @@ Route::get('/smtp',[MailController::class,'mailview'])->name('settings.Smtp.mail
 
 
     //Blog Category
-    Route::group(['prefix' => 'blog-category', 'as' => 'blog.category.'], function () {
-        Route::get('/', 'BlogController@index')->name('index');
-        Route::post('/store', 'BlogController@store')->name('store');
-        Route::get('/edit/{id}', 'BlogController@edit')->name('edit');
-        Route::post('/update/{id}', 'BlogController@update')->name('update');
-        Route::get('delete/{id}', 'BlogController@delete')->name('delete');
+    Route::group(['prefix' => 'blog-category', 'as' => 'blog-category.'], function () {
+        Route::get('/', 'BlogCategoryController@index')->name('index');
+        Route::post('/store', 'BlogCategoryController@store')->name('store');
+        Route::get('/{id}/edit', 'BlogCategoryController@edit')->name('edit');
+        Route::post('/{id}/update', 'BlogCategoryController@update')->name('update');
+        Route::get('/{id}/delete', 'BlogCategoryController@delete')->name('delete');
     });
 
-    Route::group(['prefix' => 'blog-post', 'as' => 'blog.post.'], function () {
+    Route::group(['prefix' => 'blog-post', 'as' => 'blog-post.'], function () {
         Route::get('/', 'BlogPostController@index')->name('index');
         Route::get('create', 'BlogPostController@create')->name('create');
         Route::post('store', 'BlogPostController@store')->name('store');
-        Route::get('edit/{id}', 'BlogPostController@edit')->name('edit');
-        Route::post('update/{id}', 'BlogPostController@update')->name('update');
-        Route::get('view/{id}', 'BlogPostController@view')->name('view');
-        Route::get('delete/{id}', 'BlogPostController@delete')->name('delete');
+        Route::get('{id}/edit', 'BlogPostController@edit')->name('edit');
+        Route::post('{id}/update', 'BlogPostController@update')->name('update');
+        Route::get('{id}/view', 'BlogPostController@view')->name('view');
+        Route::get('{id}/delete', 'BlogPostController@delete')->name('delete');
     });
 
     // contact

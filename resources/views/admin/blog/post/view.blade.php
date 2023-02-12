@@ -3,7 +3,7 @@
 @section('blockDropdownMenu', 'd-block')
 @section('post_create', 'active')
 @section('title') {{ $data['title'] ?? '' }} @endsection
-@section('content')
+
 @push('style')
 <style>
     td {
@@ -11,17 +11,23 @@
     }
 </style>
 @endpush
+
+@php
+$row = $data['row'];
+@endphp
+
+@section('content')
 <div class="content-wrapper">
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Posts View</h1>
+                    <h1 class="m-0">{{ $data['title'] ?? '' }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.blog.post.index') }}">Manage Post</a></li>
-                        <li class="breadcrumb-item active">Posts View</li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.blog-post.index') }}">Manage Post</a></li>
+                        <li class="breadcrumb-item active">{{ $data['title'] ?? '' }}</li>
                     </ol>
                 </div>
             </div>
@@ -40,7 +46,7 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="float-right">
-                                        <a href="{{ route('admin.blog.post.index') }}" class="btn btn-primary">Back</a>
+                                        <a href="{{ route('admin.blog-post.index') }}" class="btn btn-primary">Back</a>
                                     </div>
                                 </div>
                             </div>
@@ -50,34 +56,34 @@
                             <table class="table">
                                 <tr>
                                     <td>Featured Image</td>
-                                    <td><img src="{{ asset('assets/images/blog/'.$blog_post->image) }}" width="100" alt=""></td>
+                                    <td><img src="{{ asset('assets/images/blog/'.$row->image) }}" width="100" alt=""></td>
                                 </tr>
                                 <tr>
                                     <td>Post Title</td>
-                                    <td>{{ $blog_post->title }}</td>
+                                    <td>{{ $row->title }}</td>
                                 </tr>
                                 <tr>
                                     <td>Category</td>
-                                    <td>{{ $blog_post->category->name }}</td>
+                                    <td>{{ $row->category->name }}</td>
                                 </tr>
                                 <tr>
                                     <td>Publihed Status</td>
                                     <td>
-                                        @if($blog_post->status == 1)
+                                        @if($row->status == 1)
                                             <span class="badge badge-success">Active</span>
-                                        @else 
-                                        <span class="badge badge-danger">Active</span>   
+                                        @else
+                                        <span class="badge badge-danger">Active</span>
                                         @endif
-                                        
+
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Date</td>
-                                    <td>{{ date('d M Y',strtotime($blog_post->created_at)) }}</td>
+                                    <td>{{ date('d M Y',strtotime($row->created_at)) }}</td>
                                 </tr>
                                 <tr>
                                     <td>Description</td>
-                                    <td>{!! $blog_post->details !!}</td>
+                                    <td>{!! $row->details !!}</td>
                                 </tr>
                             </table>
                         </div>

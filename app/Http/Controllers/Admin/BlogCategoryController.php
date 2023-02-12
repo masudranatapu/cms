@@ -5,20 +5,43 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Support\Str;
 use App\Models\BlogCategory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
 
-class BlogController extends Controller
+class BlogCategoryController extends Controller
 {
+    public $user;
+    protected $bcat;
+    public function __construct(BlogCategory $bcat)
+    {
+        $this->bcat     = $bcat;
+
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::guard('admin')->user();
+            return $next($request);
+        });
+    }
+
     public function index()
     {
-        $blog_categories = BlogCategory::orderBy('id', 'desc')->get();
-        return view('admin.blog.category.index', compact('blog_categories'));
+
+        if (is_null($this->user) || !$this->user->can('admin.blog-category.index')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
+
+        $data['title']  = 'Blog Category';
+        $data['rows']   = BlogCategory::orderBy('id', 'desc')->get();
+        return view('admin.blog.category.index', compact('data'));
     }
 
     public function store(Request $request)
     {
+
+        if (is_null($this->user) || !$this->user->can('admin.blog-category.store')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
 
         DB::beginTransaction();
         try {
@@ -39,15 +62,19 @@ class BlogController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             Toastr::error(trans('Post Category not Created !'), 'Error', ["positionClass" => "toast-top-center"]);
-            return redirect()->route('admin.blog.category.index');
+            return redirect()->route('admin.blog-category.index');
         }
         DB::commit();
-        Toastr::success(trans('Post Category Successfully!'), 'Success', ["positionClass" => "toast-top-center"]);
-        return redirect()->route('admin.blog.category.index');
+        Toastr::success(trans('Category Successfully!'), 'Success', ["positionClass" => "toast-top-center"]);
+        return redirect()->route('admin.blog-category.index');
     }
     public function edit($id)
     {
-        // dd($id);
+
+        if (is_null($this->user) || !$this->user->can('admin.blog-category.edit')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
+
         $blog_category = BlogCategory::find($id);
         $html = view('admin.blog.category.edit', compact('blog_category'))->render();
         return response()->json($html);
@@ -55,6 +82,9 @@ class BlogController extends Controller
 
     public function update(Request $request, $id)
     {
+        if (is_null($this->user) || !$this->user->can('admin.blog-category.update')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
 
         DB::beginTransaction();
         try {
@@ -73,28 +103,32 @@ class BlogController extends Controller
             $blog_category->save();
         } catch (\Exception $e) {
             DB::rollback();
-            Toastr::error(trans('Post Category not Updated !'), 'Error', ["positionClass" => "toast-top-center"]);
-            return redirect()->route('admin.blog.category.index');
+            Toastr::error(trans('Category not Updated !'), 'Error', ["positionClass" => "toast-top-center"]);
+            return redirect()->route('admin.blog-category.index');
         }
         DB::commit();
         Toastr::success(trans('Post Updated Successfully !'), 'Success', ["positionClass" => "toast-top-center"]);
-        return redirect()->route('admin.blog.category.index');
+        return redirect()->route('admin.blog-category.index');
     }
 
     public function delete($id)
     {
+        if (is_null($this->user) || !$this->user->can('admin.blog-category.delete')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
+
         DB::beginTransaction();
         try {
             $blog_category = BlogCategory::find($id);
             $blog_category->delete();
         } catch (\Exception $e) {
             DB::rollback();
-            Toastr::error(trans('Post Category not Deleted !'), 'Error', ["positionClass" => "toast-top-center"]);
-            return redirect()->route('admin.blog.category.index');
+            Toastr::error(trans('Category not Deleted !'), 'Error', ["positionClass" => "toast-top-center"]);
+            return redirect()->route('admin.blog-category.index');
         }
         DB::commit();
-        Toastr::success(trans('Post Category Deleted Successfully !'), 'Success', ["positionClass" => "toast-top-center"]);
-        return redirect()->route('admin.blog.category.index');
+        Toastr::success(trans('Category Deleted Successfully !'), 'Success', ["positionClass" => "toast-top-center"]);
+        return redirect()->route('admin.blog-category.index');
     }
 
 }

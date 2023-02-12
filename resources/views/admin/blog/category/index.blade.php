@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 @push('style')
-    
+
 @endpush
 @section('blogDropdown', 'menu-open')
 @section('blockDropdownMenu', 'd-block')
@@ -11,12 +11,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Categories</h1>
+                    <h1 class="m-0">{{ $data['title'] ?? '' }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Categories</li>
+                        <li class="breadcrumb-item active">{{ $data['title'] ?? '' }}</li>
                     </ol>
                 </div>
             </div>
@@ -31,13 +31,15 @@
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col-6">
-                                    <h3 class="card-title">Manage Categories </h3>
+                                    <h3 class="card-title">Manage {{ $data['title'] ?? '' }} </h3>
                                 </div>
                                 <div class="col-6">
                                     <div class="float-right">
+                                        @if (Auth::user()->can('admin.blog-category.index'))
                                         <a href="javascript:void(0)" data-toggle="modal" data-target="#addCategoryModal"
-                                            class="btn btn-primary">Add
-                                            New</a>
+                                            class="btn btn-primary">Add New</a>
+                                        @endif
+
                                     </div>
                                 </div>
                             </div>
@@ -55,25 +57,32 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($blog_categories as $key=> $value)
+                                    @if(isset($data['rows']) && count($data['rows'])>0)
+                                    @foreach ($data['rows'] as $key=> $row)
                                         <tr>
                                         <td>{{$key + 1}}</td>
-                                        <td>{{ $value->name}}</td>
-                                        <td>{{$value->order_number}}</td>
+                                        <td>{{ $row->name}}</td>
+                                        <td>{{$row->order_number}}</td>
                                         <td>
-                                            @if ($value->status == 1)
+                                            @if ($row->status == 1)
                                                 <span class="badge badge-success">Published</span>
                                             @else
-                                                <span class="badge badge-danger">Unpublished</span>    
+                                                <span class="badge badge-danger">Unpublished</span>
                                             @endif
-                                            
+
                                         </td>
                                         <td>
-                                            <a href="javascript:void(0)" class="btn btn-secondary edit" data-id="{{$value->id}}">Edit</a>
-                                            <a href="{{ route('admin.blog.category.delete',$value->id) }}" id="deleteData" class="btn btn-danger">Delete</a>
+                                            @if (Auth::user()->can('admin.blog-category.edit'))
+                                            <a href="javascript:void(0)" class="btn btn-secondary edit btn-xs" data-id="{{$row->id}}">Edit</a>
+                                            @endif
+
+                                            @if (Auth::user()->can('admin.blog-category.delete'))
+                                            <a href="{{ route('admin.blog-category.delete',$row->id) }}" id="deleteData" class="btn btn-danger btn-xs">Delete</a>
+                                            @endif
                                         </td>
                                     </tr>
                                     @endforeach
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -96,7 +105,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('admin.blog.category.store') }}" method="post" enctype="multipart/form-data">
+                <form action="{{ route('admin.blog-category.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label for="name" class="form-label">Category Name</label>
@@ -139,7 +148,7 @@
             </div>
             <div class="modal-body">
                 <div id="modal_body"></div>
-                
+
             </div>
         </div>
     </div>
@@ -150,7 +159,7 @@
 <script type="text/javascript">
     $(document).on('click', '.edit', function() {
         let cat_id = $(this).data('id');
-        $.get('blog-category/edit/' + cat_id, function(data) {
+        $.get('blog-category/'+cat_id+'/edit', function(data) {
             console.log(data);
             $('#editCategoryModal').modal('show');
             $('#modal_body').html(data);
@@ -158,4 +167,4 @@
     });
 </script>
 @endpush
-  
+

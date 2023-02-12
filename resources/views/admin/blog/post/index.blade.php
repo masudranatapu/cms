@@ -8,12 +8,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0"> Blog Posts</h1>
+                    <h1 class="m-0"> {{ $data['title'] ?? '' }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active"> Blog Posts</li>
+                        <li class="breadcrumb-item active"> {{ $data['title'] ?? '' }}</li>
                     </ol>
                 </div>
             </div>
@@ -28,12 +28,14 @@
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col-6">
-                                    <h3 class="card-title">Manage Blog Posts </h3>
+                                    <h3 class="card-title">Manage {{ $data['title'] ?? '' }} </h3>
                                 </div>
                                 <div class="col-6">
                                     <div class="float-right">
-                                        <a href="{{ route('admin.blog.post.create') }}" class="btn btn-primary">Add
+                                        @if (Auth::user()->can('admin.blog-post.index'))
+                                        <a href="{{ route('admin.blog-post.create') }}" class="btn btn-primary">Add
                                             New</a>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -53,31 +55,41 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($blog_posts as $key=>$value)
+                                    @if(isset($data['rows']) && count($data['rows'])>0)
+                                    @foreach($data['rows'] as $key=>$row)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td><img src="{{ asset('assets/images/blog/'.$value->image) }}" width="80" height="80"
+                                        <td><img src="{{ asset('assets/images/blog/'.$row->image) }}" width="80" height="80"
                                                 alt="fdsfds"></td>
-                                        <td>{{  $value->title }}</td>
-                                        <td>{{ $value->category->name }}</td>
-                                        <td>{{ date('d M Y',strtotime($value->created_at)) }}</td>
+                                        <td>{{  $row->title }}</td>
+                                        <td>{{ $row->category->name }}</td>
+                                        <td>{{ date('d M Y',strtotime($row->created_at)) }}</td>
                                         <td>
-                                            @if($value->status == 1)
+                                            @if($row->status == 1)
                                              <span class="badge badge-success">Published</span>
                                             @else
                                             <span class="badge badge-danger">Unpublished</span>
                                             @endif
-                                            
+
                                         </td>
                                         <td>
-                                            <a href="{{ route('admin.blog.post.view',$value->id) }}"
-                                                class="btn btn-primary">View</a>
-                                            <a href="{{ route('admin.blog.post.edit',$value->id) }}"
-                                                class="btn btn-secondary">Edit</a>
-                                            <a href="{{ route('admin.blog.post.delete',$value->id) }}" id="deleteData" class="btn btn-danger">Delete</a>
+                                            @if (Auth::user()->can('admin.blog-post.index'))
+                                            <a href="{{ route('admin.blog-post.view',$row->id) }}"
+                                                class="btn btn-xs btn-primary">View</a>
+                                            @endif
+
+                                            @if (Auth::user()->can('admin.blog-post.index'))
+                                            <a href="{{ route('admin.blog-post.edit',$row->id) }}"
+                                                class="btn btn-xs btn-secondary">Edit</a>
+                                            @endif
+
+                                            @if (Auth::user()->can('admin.blog-post.index'))
+                                            <a href="{{ route('admin.blog-post.delete',$row->id) }}" id="deleteData" class="btn btn-xs btn-danger">Delete</a>
+                                            @endif
                                         </td>
                                     </tr>
                                     @endforeach
+                                    @endif
                                 </tbody>
                             </table>
                         </div>

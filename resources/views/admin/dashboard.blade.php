@@ -101,48 +101,7 @@
                 </div>
             </div>
 
-            <div class="row mt-5">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Recent franchises listing</h3>
-                        </div>
 
-                        <div class="card-body table-responsive p-0">
-                            <table id="dataTables" class="table table-hover text-nowrap">
-                                <thead>
-                                    <tr>
-                                        <th width="5%">SL</th>
-                                        <th width="15%">Image</th>
-                                        <th width="20%">Title</th>
-                                        <th width="15%">Price</th>
-                                        <th width="15%">Date</th>
-                                        <th width="15%">Status</th>
-                                        <th width="15%">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>01</td>
-                                        <td><img src="{{ asset('assets/default.png') }}" class="rounded border"
-                                                width="80" alt=""></td>
-                                        <td>Moswuito Squad</td>
-                                        <td>$55.77</td>
-                                        <td>01 Feb, 23</td>
-                                        <td><span class="badge badge-success">Active</span></td>
-                                        <td>
-                                            <a href="#" class="btn btn-primary">View</a>
-                                            <a href="#" class="btn btn-secondary">Edit</a>
-                                            <a href="#" id="deleteData" class="btn btn-danger">Delete</a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>

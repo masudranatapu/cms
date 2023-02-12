@@ -17,21 +17,49 @@ use Symfony\Component\Console\Input\Input;
 
 class BlogPostController extends Controller
 {
+    public $user;
+    protected $blog;
+    public function __construct(Blog $blog)
+    {
+        $this->blog     = $blog;
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::guard('admin')->user();
+            return $next($request);
+        });
+    }
+
     public function index()
     {
-        $blog_posts = Blog::with('category')->orderBy('id', 'desc')->get();
-        return view('admin.blog.post.index', compact('blog_posts'));
+
+        if (is_null($this->user) || !$this->user->can('admin.blog-post.index')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
+
+        $data['title']  = 'Blog Post';
+        $data['rows']   =  Blog::with('category')->orderBy('id', 'desc')->get();
+
+        return view('admin.blog.post.index', compact('data'));
     }
 
     public function create()
     {
-        $bog_category = BlogCategory::orderBy('id', 'desc')->get();
 
-        return view('admin.blog.post.create', compact('bog_category'));
+        if (is_null($this->user) || !$this->user->can('admin.blog-post.create')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
+
+        $data['title']  = 'Blog Post Create';
+        $data['bog_category']   = BlogCategory::orderBy('id', 'desc')->get();
+
+        return view('admin.blog.post.create', compact('data'));
     }
 
     public function store(Request $request)
     {
+        if (is_null($this->user) || !$this->user->can('admin.blog-post.store')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
+
         DB::beginTransaction();
         try {
 
@@ -73,22 +101,32 @@ class BlogPostController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             Toastr::error(trans('Post not Created !'), 'Error', ["positionClass" => "toast-top-center"]);
-            return redirect()->route('admin.blog.post.create');
+            return redirect()->route('admin.blog-post.create');
         }
         DB::commit();
         Toastr::success(trans('Post Created Successfully !'), 'Success', ["positionClass" => "toast-top-center"]);
-        return redirect()->route('admin.blog.post.index');
+        return redirect()->route('admin.blog-post.index');
     }
 
     public function edit($id)
     {
-        $blog_post = Blog::find($id);
-        $bog_category = BlogCategory::orderBy('id', 'desc')->get();
-        return view('admin.blog.post.edit', compact('blog_post', 'bog_category'));
+        if (is_null($this->user) || !$this->user->can('admin.blog-post.edit')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
+
+        $data['title'] = 'Post Edit';
+        $data['row'] = Blog::find($id);
+        $data['bog_category'] = BlogCategory::orderBy('id', 'desc')->get();
+        return view('admin.blog.post.edit', compact('data'));
     }
 
     public function update(Request $request, $id){
-       
+
+        if (is_null($this->user) || !$this->user->can('admin.blog-post.update')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
+
+
         DB::beginTransaction();
         try {
 
@@ -101,7 +139,7 @@ class BlogPostController extends Controller
                 'image'         => 'nullable'
 
             ]);
-       
+
             $blog_post =  Blog::find($id);
             $blog_post->user_id = Auth::id();
             $blog_post->title = $request->title;
@@ -136,17 +174,30 @@ class BlogPostController extends Controller
         }
         DB::commit();
         Toastr::success(trans('Post Updated Successfully !'), 'Success', ["positionClass" => "toast-top-center"]);
-        return redirect()->route('admin.blog.post.index');
+        return redirect()->route('admin.blog-post.index');
     }
 
     public function view($id){
-        $blog_post = Blog::find($id);
-        $bog_category = BlogCategory::orderBy('id', 'desc')->get();
-        return view('admin.blog.post.view', compact('blog_post', 'bog_category'));
+
+        if (is_null($this->user) || !$this->user->can('admin.blog-post.view')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
+
+
+        $data['title'] = 'Post Edit';
+        $data['row'] = Blog::find($id);
+        $data['bog_category'] = BlogCategory::orderBy('id', 'desc')->get();
+
+        return view('admin.blog.post.view', compact('data'));
     }
 
     public function delete($id)
     {
+        if (is_null($this->user) || !$this->user->can('admin.blog-post.delete')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
+
+
         DB::beginTransaction();
         try {
             $blog_post = Blog::find($id);
@@ -157,10 +208,10 @@ class BlogPostController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             Toastr::error(trans('Post not Deleted !'), 'Error', ["positionClass" => "toast-top-center"]);
-            return redirect()->route('admin.blog.post.index');
+            return redirect()->route('admin.blog-post.index');
         }
         DB::commit();
         Toastr::success(trans('Post Deleted Successfully !'), 'Success', ["positionClass" => "toast-top-center"]);
-        return redirect()->route('admin.blog.post.index');
+        return redirect()->route('admin.blog-post.index');
     }
 }
