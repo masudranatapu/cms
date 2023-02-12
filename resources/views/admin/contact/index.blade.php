@@ -55,7 +55,7 @@
                                         <td>Lorem ipsum dolor sit amet consectetur adipisicing elit......</td>
                                         <td>01 Feb, 23</td>
                                         <td>
-                                            <a href="{{ route('admin.contact.view') }}" class="btn btn-primary">View</a>
+                                            <a href="" class="btn btn-primary">View</a>
                                             <a href="#" id="deleteData" class="btn btn-danger">Delete</a>
                                         </td>
                                     </tr>

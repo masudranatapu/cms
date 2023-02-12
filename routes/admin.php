@@ -217,6 +217,7 @@ Route::get('/smtp',[MailController::class,'mailview'])->name('settings.Smtp.mail
         Route::get('/{id}/delete', 'BlogCategoryController@delete')->name('delete');
     });
 
+    //Blog Post
     Route::group(['prefix' => 'blog-post', 'as' => 'blog-post.'], function () {
         Route::get('/', 'BlogPostController@index')->name('index');
         Route::get('create', 'BlogPostController@create')->name('create');
@@ -227,8 +228,17 @@ Route::get('/smtp',[MailController::class,'mailview'])->name('settings.Smtp.mail
         Route::get('{id}/delete', 'BlogPostController@delete')->name('delete');
     });
 
-    // contact
-    Route::get('contact', 'ContactController@index')->name('contact.index');
-    Route::get('contact/view', 'ContactController@view')->name('contact.view');
-    Route::get('contact/delete', 'ContactController@delete')->name('contact.delete');
+    //Contact
+    Route::group(['prefix' => 'contact', 'as' => 'contact.'], function () {
+        Route::get('/', 'ContactController@index')->name('index');
+        Route::get('create', 'ContactController@create')->name('create');
+        Route::post('store', 'ContactController@store')->name('store');
+        Route::get('{id}/edit', 'ContactController@edit')->name('edit');
+        Route::post('{id}/update', 'ContactController@update')->name('update');
+        Route::get('{id}/view', 'ContactController@view')->name('view');
+        Route::get('{id}/delete', 'ContactController@delete')->name('delete');
+    });
+
+
+
 });

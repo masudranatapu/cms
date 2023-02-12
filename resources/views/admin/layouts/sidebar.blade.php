@@ -78,11 +78,13 @@
                     </ul>
                 </li>
                 <li class="nav-item">
+                    @if (Auth::user()->can('admin.contact.index'))
                     <a href="{{ route('admin.contact.index') }}"
                         class="nav-link {{ Request::routeIs('admin.contact.index') ? 'active' : '' }} @yield('contact_view')">
                         <i class="fa fa-address-book"></i>
                         {{ __('Contact') }}
                     </a>
+                    @endif
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.faq.index') }}"
