@@ -71,11 +71,11 @@
                                                     <td>
                                                         @if (Auth::user()->can('admin.contact.index'))
                                                             <a href="{{ route('admin.contact.view', $row->id) }}"
-                                                                class="btn btn-primary">View</a>
+                                                                class="btn btn-primary btn-xs">View</a>
                                                         @endif
                                                         @if (Auth::user()->can('admin.contact.index'))
                                                             <a href="{{ route('admin.contact.edit', $row->id) }}"
-                                                                class="btn btn-secondary">Edit</a>
+                                                                class="btn btn-secondary btn-xs">Edit</a>
                                                         @endif
                                                         @if (Auth::user()->can('admin.contact.index'))
                                                             <a href="{{ route('admin.contact.delete', $row->id) }}"

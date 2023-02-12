@@ -10,4 +10,5 @@ class CategoryController extends Controller
         return View::make('categories.index')
             ->with('categories', Category::all());
     }
+    
 }

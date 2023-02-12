@@ -208,6 +208,25 @@ Route::get('/smtp',[MailController::class,'mailview'])->name('settings.Smtp.mail
     Route::get('franchise/delete/{id}', 'FranchisesController@delete')->name('franchises.delete');
 
 
+     //Category
+     Route::group(['prefix' => 'category', 'as' => 'category.'], function () {
+        Route::get('/', 'CategoryController@index')->name('index');
+        Route::post('/store', 'CategoryController@store')->name('store');
+        Route::get('/{id}/edit', 'CategoryController@edit')->name('edit');
+        Route::post('/{id}/update', 'CategoryController@update')->name('update');
+        Route::get('/{id}/delete', 'CategoryController@delete')->name('delete');
+    });
+
+    //SubCategory
+    Route::group(['prefix' => 'subcategory', 'as' => 'subcategory.'], function () {
+        Route::get('/', 'SubCategoryController@index')->name('index');
+        Route::post('/store', 'SubCategoryController@store')->name('store');
+        Route::get('/{id}/edit', 'SubCategoryController@edit')->name('edit');
+        Route::post('/{id}/update', 'SubCategoryController@update')->name('update');
+        Route::get('/{id}/delete', 'SubCategoryController@delete')->name('delete');
+    });
+
+
     //Blog Category
     Route::group(['prefix' => 'blog-category', 'as' => 'blog-category.'], function () {
         Route::get('/', 'BlogCategoryController@index')->name('index');

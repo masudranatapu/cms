@@ -9,15 +9,20 @@ use App\Models\Contact;
 
 class ContactController extends Controller
  {
-     public $user;
+    public $user;
     protected $contact;
-     public function __construct(Contact $contact)
+
+    public function __construct(Contact $contact)
     {
         $this->contact     = $contact;
        $this->middleware(function ($request, $next) {
              $this->user = Auth::guard('admin')->user();
             return $next($request);
-        });     }
+        });
+    }
+
+
+
     public function index()
     {
        if (is_null($this->user) || !$this->user->can('admin.contact.index')) {
@@ -25,9 +30,8 @@ class ContactController extends Controller
        }
 
         $data['title']  = 'Contact';
-        $data['rows']   =  Contact::with('category')->orderBy('id', 'desc')->get();
-        // dd($data['rows']);
-        return view('admin.contact.index');
+        $data['rows']   =  Contact::orderBy('id', 'desc')->get();
+        return view('admin.contact.index',compact('data'));
    }
 
 //     public function view()
@@ -47,11 +51,11 @@ class ContactController extends Controller
 //         if (is_null($this->user) || !$this->user->can('admin.contact.delete')) {
 //             abort(403, 'Sorry !! You are Unauthorized.');
 //         }
-    
+
 //         $contact = Contact::find($id);
-        
+
 //         $contact->delete();
-        
+
 //         Toastr::success(trans('Contact Deleted Successfully !'), 'Success', ["positionClass" => "toast-top-center"]);
 //         return view('admin.contact.view');
 

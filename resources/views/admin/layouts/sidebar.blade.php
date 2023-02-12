@@ -77,15 +77,19 @@
 
                     </ul>
                 </li>
+
+                @if (Auth::user()->can('admin.contact.index'))
                 <li class="nav-item">
-                    @if (Auth::user()->can('admin.contact.index'))
+
                     <a href="{{ route('admin.contact.index') }}"
                         class="nav-link {{ Request::routeIs('admin.contact.index') ? 'active' : '' }} @yield('contact_view')">
                         <i class="fa fa-address-book"></i>
                         {{ __('Contact') }}
                     </a>
-                    @endif
+
                 </li>
+                @endif
+
                 <li class="nav-item">
                     <a href="{{ route('admin.faq.index') }}"
                         class="nav-link {{ Request::routeIs('admin.faq.index') ? 'active' : '' }} @yield('faq_create')">
@@ -216,6 +220,27 @@
                 <li class="nav-item"><a href="{{ route('admin.permissions.index') }}"
                         class="nav-link @yield('admin-permissions')"><i class=" fa fa-book"></i>
                         {{ __('Admin permissions') }}</a></li>
+
+                @if (Auth::user()->can('admin.category.index'))
+                <li class="nav-item">
+                    <a href="{{ route('admin.category.index') }}"
+                        class="nav-link {{ Request::routeIs('admin.category.index') ? 'active' : '' }} @yield('category_view')">
+                        <i class="fa fa-address-book"></i>
+                        {{ __('Category') }}
+                    </a>
+                </li>
+                @endif
+
+                @if (Auth::user()->can('admin.subcategory.index'))
+                <li class="nav-item">
+                    <a href="{{ route('admin.subcategory.index') }}"
+                        class="nav-link {{ Request::routeIs('admin.subcategory.index') ? 'active' : '' }} @yield('subcategory_view')">
+                        <i class="fa fa-address-book"></i>
+                        {{ __('Sub Category') }}
+                    </a>
+                </li>
+                @endif
+
             </ul>
         </nav>
     </div>
