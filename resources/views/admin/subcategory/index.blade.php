@@ -1,10 +1,12 @@
 @extends('admin.layouts.master')
+
+@section('subcategory', 'active')
+@section('title') {{ $data['title'] ?? '' }} @endsection
+
 @push('style')
 
 @endpush
-@section('blogDropdown', 'menu-open')
-@section('blockDropdownMenu', 'd-block')
-@section('title') {{ $data['title'] ?? '' }} @endsection
+
 @section('content')
 <div class="content-wrapper">
     <div class="content-header">
@@ -62,9 +64,9 @@
                                     @foreach ($data['rows'] as $key=> $row)
                                         <tr>
                                         <td>{{$key + 1}}</td>
-                                        <td>{{ $row->name}}</td>
                                         <td>{{ $row->category->name ?? ''}}</td>
-                                        <td>{{$row->order}}</td>
+                                        <td>{{ $row->name}}</td>
+                                        <td>{{$row->order_number}}</td>
                                         <td>
                                             @if ($row->status == 1)
                                                 <span class="badge badge-success">Published</span>
@@ -101,7 +103,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
+                <h5 class="modal-title" id="addCategoryModalLabel">Add Sub Category</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -109,14 +111,26 @@
             <div class="modal-body">
                 <form action="{{ route('admin.subcategory.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
+
                     <div class="form-group">
-                        <label for="name" class="form-label">Category Name</label>
+                        <label for="category_id" class="form-label">Select Category </label>
+                        <select type="text" name="category_id" id="category_id" class="form-control select2"  required style="width: 100%">
+                            @if(isset($data['categories']) && count($data['categories'])>0)
+                            @foreach($data['categories'] as $key => $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                            @endif
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name" class="form-label">Sub Category Name</label>
                         <input type="text" name="name" id="name" class="form-control" placeholder="Category name"
                             required>
                     </div>
                     <div class="form-group">
                         <label for="order_number" class="form-label">Order Number</label>
-                        <input type="text" name="order_number" id="order_number" class="form-control" placeholder="Order Number"
+                        <input type="number" name="order_number" id="order_number" class="form-control" placeholder="Order Number"
                             required>
                     </div>
                     <div class="form-group">
@@ -161,7 +175,7 @@
 <script type="text/javascript">
     $(document).on('click', '.edit', function() {
         let cat_id = $(this).data('id');
-        $.get('blog-category/'+cat_id+'/edit', function(data) {
+        $.get('subcategory/'+cat_id+'/edit', function(data) {
             console.log(data);
             $('#editCategoryModal').modal('show');
             $('#modal_body').html(data);

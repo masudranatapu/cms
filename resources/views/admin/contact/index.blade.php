@@ -1,7 +1,8 @@
 @extends('admin.layouts.master')
-@section('title')
-    {{ $data['title'] ?? '' }}
-@endsection
+
+@section('contact', 'active')
+@section('title') {{ $data['title'] ?? '' }} @endsection
+
 @section('content')
     <div class="content-wrapper">
         <div class="content-header">
@@ -69,18 +70,21 @@
 
                                                     </td>
                                                     <td>
-                                                        @if (Auth::user()->can('admin.contact.index'))
-                                                            <a href="{{ route('admin.contact.view', $row->id) }}"
-                                                                class="btn btn-primary btn-xs">View</a>
+
+                                                        @if (Auth::user()->can('admin.contact.view'))
+                                                            <a href="javascript:void(0)" class="btn btn-primary btn-xs view" data-id="{{$row->id}}">View</a>
                                                         @endif
-                                                        @if (Auth::user()->can('admin.contact.index'))
-                                                            <a href="{{ route('admin.contact.edit', $row->id) }}"
-                                                                class="btn btn-secondary btn-xs">Edit</a>
+
+                                                        {{-- @if (Auth::user()->can('admin.contact.edit'))
+                                                            <a href="javascript:void(0)" class="btn btn-secondary edit btn-xs" data-id="{{$row->id}}" >Edit</a>
+                                                        @endif --}}
+
+
+
+                                                        @if (Auth::user()->can('admin.contact.delete'))
+                                                        <a href="{{ route('admin.contact.delete',$row->id) }}" id="deleteData" class="btn btn-danger btn-xs">Delete</a>
                                                         @endif
-                                                        @if (Auth::user()->can('admin.contact.index'))
-                                                            <a href="{{ route('admin.contact.delete', $row->id) }}"
-                                                                id="deleteData" class="btn btn-xs btn-danger">Delete</a>
-                                                        @endif
+
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -95,4 +99,37 @@
             </div>
         </div>
     </div>
+
+{{-- edit modal --}}
+<div class="modal fade" id="viewContactModal" tabindex="-1" aria-labelledby="viewContactModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewContactModalLabel">View Contact Info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="modal_body"></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
+
+@push('script')
+<script type="text/javascript">
+    $(document).on('click', '.view', function() {
+        let cat_id = $(this).data('id');
+        $.get('contact/'+cat_id+'/view', function(data) {
+            console.log(data);
+            $('#viewContactModal').modal('show');
+            $('#modal_body').html(data);
+        });
+    });
+</script>
+@endpush

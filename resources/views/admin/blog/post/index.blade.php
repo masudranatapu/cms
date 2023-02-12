@@ -1,6 +1,7 @@
 @extends('admin.layouts.master')
 @section('blogDropdown', 'menu-open')
-@section('blockDropdownMenu', 'd-block')
+@section('blog-post', 'active')
+
 @section('title') {{ $data['title'] ?? '' }} @endsection
 @section('content')
 <div class="content-wrapper">

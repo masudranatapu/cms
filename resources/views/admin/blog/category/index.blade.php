@@ -3,7 +3,7 @@
 
 @endpush
 @section('blogDropdown', 'menu-open')
-@section('blockDropdownMenu', 'd-block')
+@section('blog-category', 'active')
 @section('title') {{ $data['title'] ?? '' }} @endsection
 @section('content')
 <div class="content-wrapper">
@@ -159,7 +159,7 @@
 <script type="text/javascript">
     $(document).on('click', '.edit', function() {
         let cat_id = $(this).data('id');
-        $.get('blog-category/'+cat_id+'/edit', function(data) {
+        $.get('category/'+cat_id+'/edit', function(data) {
             console.log(data);
             $('#editCategoryModal').modal('show');
             $('#modal_body').html(data);

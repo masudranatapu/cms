@@ -13,7 +13,7 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
                     <a href="{{ route('admin.dashboard') }}"
-                        class="nav-link {{ Request::routeIs('admin.dashboard') ? 'active' : '' }}">
+                        class="nav-link @yield('dashboard')">
                         <i class="fa fa-dashboard"></i>
                         {{ __('Dashboard') }}
                     </a>
@@ -49,16 +49,13 @@
                 <li class="nav-item @yield('blogDropdown')">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fa fa-file-pen"></i>
-                        <p>
-                            Blog
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
+                        <p> Blog <i class="fas fa-angle-left right"></i> </p>
                     </a>
-                    <ul class="nav nav-treeview @yield('blockDropdownMenu')" style="display: none;">
+                    <ul class="nav nav-treeview @yield('blockDropdownMenu')">
                         @if (Auth::user()->can('admin.blog-category.index'))
                         <li class="nav-item">
                             <a href="{{ route('admin.blog-category.index') }}"
-                                class="nav-link  {{ Request::routeIs('admin.blog-category.index') ? 'active' : '' }}">
+                                class="nav-link @yield('blog-category')">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Blog Category</p>
                             </a>
@@ -67,8 +64,7 @@
 
                         @if (Auth::user()->can('admin.blog-post.index'))
                         <li class="nav-item">
-                            <a href="{{ route('admin.blog-post.index') }}"
-                                class="nav-link  {{ Request::routeIs('admin.blog-post.index') ? 'active' : '' }} @yield('post_create')">
+                            <a href="{{ route('admin.blog-post.index') }}" class="nav-link  @yield('blog-post')">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Blog Post</p>
                             </a>
@@ -78,32 +74,56 @@
                     </ul>
                 </li>
 
-                @if (Auth::user()->can('admin.contact.index'))
+                @if (Auth::user()->can('admin.category.index'))
                 <li class="nav-item">
-
-                    <a href="{{ route('admin.contact.index') }}"
-                        class="nav-link {{ Request::routeIs('admin.contact.index') ? 'active' : '' }} @yield('contact_view')">
+                    <a href="{{ route('admin.category.index') }}"
+                        class="nav-link @yield('category')">
                         <i class="fa fa-address-book"></i>
-                        {{ __('Contact') }}
+                        {{ __('Category') }}
                     </a>
-
                 </li>
                 @endif
 
+                @if (Auth::user()->can('admin.subcategory.index'))
+                <li class="nav-item">
+                    <a href="{{ route('admin.subcategory.index') }}"
+                        class="nav-link @yield('subcategory')">
+                        <i class="fa fa-address-book"></i>
+                        {{ __('Sub Category') }}
+                    </a>
+                </li>
+                @endif
+
+
+                @if (Auth::user()->can('admin.contact.index'))
+                <li class="nav-item">
+                    <a href="{{ route('admin.contact.index') }}"
+                        class="nav-link  @yield('contact')">
+                        <i class="fa fa-address-book"></i>
+                        {{ __('Contact') }}
+                    </a>
+                </li>
+                @endif
+
+                @if (Auth::user()->can('admin.faq.index'))
                 <li class="nav-item">
                     <a href="{{ route('admin.faq.index') }}"
-                        class="nav-link {{ Request::routeIs('admin.faq.index') ? 'active' : '' }} @yield('faq_create')">
+                        class="nav-link @yield('faq')">
                         <i class="fa fa-question"></i>
                         {{ __('Faq') }}
                     </a>
                 </li>
+                @endif
+
+                @if (Auth::user()->can('admin.cpage.index'))
                 <li class="nav-item">
                     <a href="{{ route('admin.cpage.index') }}"
-                        class="nav-link {{ Request::routeIs('admin.cpage.index') ? 'active' : '' }} @yield('cpage_create')">
+                        class="nav-link  @yield('cpage')">
                         <i class=" fa fa-book"></i>
                         {{ __('Custom page') }}
                     </a>
                 </li>
+                @endif
 
                 {{-- <li class="nav-item">
                     <a href="{{ route('admin.cpage.index') }}"
@@ -112,17 +132,20 @@
                         {{ __('Brand') }}
                     </a>
                 </li> --}}
+
+                @if (Auth::user()->can('admin.brand.index'))
                 <li class="nav-item">
                     <a href="{{ route('admin.brand.index') }}"
-                        class="nav-link {{ Request::is('admin/brand') ? 'active' : '' }}">
+                        class="nav-link  @yield('brand')">
                         <i class=" fa fa-award"></i>
                         {{ __('Brand') }}
                     </a>
                 </li>
+                @endif
 
 
 
-                <li class="nav-item {{ Request::is('admin/view') ? 'menu-open' : '' }}">
+                <li class="nav-item ">
                     <a href="javascript:;" class="nav-link ">
                         <i class="nav-icon far fa-envelope"></i>
                         <p>
@@ -133,7 +156,7 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="{{ route('admin.newsletter.list') }}"
-                                class="nav-link {{ Request::is('admin/view') ? 'active' : '' }}">
+                                class="nav-link @yield('newsletter')">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Email List</p>
                             </a>
@@ -150,13 +173,11 @@
 
                 <li class="nav-item">
                     <a href="{{ route('admin.user.index') }}"
-                        class="nav-link {{ Request::routeIs('admin.user.index') ? 'active' : '' }}">
+                        class="nav-link @yield('user')">
                         <i class=" fa fa-users"></i>
                         {{ __('User') }}
                     </a>
                 </li>
-
-
 
 
 
@@ -173,36 +194,34 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="{{ route('admin.settings.General.general') }}"
-                                class="nav-link {{ Request::is('admin/general') ? 'active' : '' }}">
+                                class="nav-link">
                                 <i class="fas fa-cog nav-icon"></i>
                                 <p>General Settings</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.settings.Language.index') }}"
-                                class="nav-link
-                                {{ Request::is('admin/languages') ? 'active' : '' }}">
+                            <a href="{{ route('admin.settings.Language.index') }}" class="nav-link">
                                 <i class="fas fa-globe nav-icon"></i>
                                 <p>Language</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('admin.settings.Smtp.mail') }}"
-                                class="nav-link {{ Request::is('admin/smtp') ? 'active' : '' }}">
+                                class="nav-link">
                                 <i class="fas fa-envelope nav-icon"></i>
                                 <p>SMTP</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('admin.settings.Currency.index') }}"
-                                class="nav-link {{ Request::is('admin/currency') ? 'active' : '' }}">
+                                class="nav-link ">
                                 <i class="fas fa-dollar-sign nav-icon"></i>
                                 <p>Currency</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('admin.settings.MobileApp.index') }}"
-                                class="nav-link {{ Request::is('admin/sc') ? 'active' : '' }}">
+                                class="nav-link">
                                 <i class="fas fa-mobile nav-icon"></i>
                                 <p>Mobile App Config</p>
                             </a>
@@ -221,25 +240,7 @@
                         class="nav-link @yield('admin-permissions')"><i class=" fa fa-book"></i>
                         {{ __('Admin permissions') }}</a></li>
 
-                @if (Auth::user()->can('admin.category.index'))
-                <li class="nav-item">
-                    <a href="{{ route('admin.category.index') }}"
-                        class="nav-link {{ Request::routeIs('admin.category.index') ? 'active' : '' }} @yield('category_view')">
-                        <i class="fa fa-address-book"></i>
-                        {{ __('Category') }}
-                    </a>
-                </li>
-                @endif
 
-                @if (Auth::user()->can('admin.subcategory.index'))
-                <li class="nav-item">
-                    <a href="{{ route('admin.subcategory.index') }}"
-                        class="nav-link {{ Request::routeIs('admin.subcategory.index') ? 'active' : '' }} @yield('subcategory_view')">
-                        <i class="fa fa-address-book"></i>
-                        {{ __('Sub Category') }}
-                    </a>
-                </li>
-                @endif
 
             </ul>
         </nav>

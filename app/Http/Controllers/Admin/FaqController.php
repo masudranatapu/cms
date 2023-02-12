@@ -13,26 +13,44 @@ use Illuminate\Support\Facades\Auth;
 class FaqController extends Controller
 {
     protected $faq;
-    public function __construct(
-        Faq $faq
-    ) {
+    public $user;
+
+    public function __construct(Faq $faq)
+    {
         $this->faq     = $faq;
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::guard('admin')->user();
+            return $next($request);
+        });
     }
 
     public function index(Request $request)
     {
+
+        if (is_null($this->user) || !$this->user->can('admin.faq.index')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
+
         $data['title'] = 'FAQ List';
         $data['rows'] = Faq::get();
-        return view('admin.faq.index', $data);
+        return view('admin.faq.index', compact('data'));
     }
 
     public function create()
     {
+        if (is_null($this->user) || !$this->user->can('admin.faq.create')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
+
         return view('admin.faq.create');
     }
 
     public function store(Request $request)
     {
+        if (is_null($this->user) || !$this->user->can('admin.faq.store')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
+
         $request->validate([
             'title' => 'required',
             'body' => 'required',
@@ -60,12 +78,20 @@ class FaqController extends Controller
 
     public function edit($id)
     {
+        if (is_null($this->user) || !$this->user->can('admin.faq.edit')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
+
         $data =  Faq::find($id);
         return view('admin.faq.edit', compact('data'));
     }
 
     public function update(Request $request, $id)
     {
+        if (is_null($this->user) || !$this->user->can('admin.faq.update')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
+
         $request->validate([
             'title' => 'required',
             'body' => 'required',
@@ -94,16 +120,23 @@ class FaqController extends Controller
 
     public function view($id)
     {
+        if (is_null($this->user) || !$this->user->can('admin.faq.view')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
+
         $data =  Faq::find($id);
         return view('admin.faq.view', compact('data'));
     }
 
 
 
-
-
     public function delete($id)
     {
+
+        if (is_null($this->user) || !$this->user->can('admin.faq.delete')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
+
         $faq = Faq::findOrFail($id);
         $faq->delete();
         Toastr::success(trans('Successfully delete faq !'), 'Success', ["positionClass" => "toast-top-right"]);

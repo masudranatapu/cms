@@ -1,10 +1,11 @@
 @extends('admin.layouts.master')
+
+@section('category', 'active')
+@section('title') {{ $data['title'] ?? '' }} @endsection
+
 @push('style')
 
 @endpush
-@section('blogDropdown', 'menu-open')
-@section('blockDropdownMenu', 'd-block')
-@section('title') {{ $data['title'] ?? '' }} @endsection
 @section('content')
 <div class="content-wrapper">
     <div class="content-header">
@@ -35,7 +36,7 @@
                                 </div>
                                 <div class="col-6">
                                     <div class="float-right">
-                                        @if (Auth::user()->can('admin.blog-category.index'))
+                                        @if (Auth::user()->can('admin.category.create'))
                                         <a href="javascript:void(0)" data-toggle="modal" data-target="#addCategoryModal"
                                             class="btn btn-primary">Add New</a>
                                         @endif
@@ -62,7 +63,7 @@
                                         <tr>
                                         <td>{{$key + 1}}</td>
                                         <td>{{ $row->name}}</td>
-                                        <td>{{$row->order}}</td>
+                                        <td>{{$row->order_number}}</td>
                                         <td>
                                             @if ($row->status == 1)
                                                 <span class="badge badge-success">Published</span>
@@ -159,7 +160,7 @@
 <script type="text/javascript">
     $(document).on('click', '.edit', function() {
         let cat_id = $(this).data('id');
-        $.get('blog-category/'+cat_id+'/edit', function(data) {
+        $.get('category/'+cat_id+'/edit', function(data) {
             console.log(data);
             $('#editCategoryModal').modal('show');
             $('#modal_body').html(data);

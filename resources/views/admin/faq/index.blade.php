@@ -1,19 +1,23 @@
 @extends('admin.layouts.master')
-@section('title')
-    {{ $title }}
-@endsection
+@section('faq', 'active')
+@section('title'){{ $data['title'] ?? '' }} @endsection
+
+@php
+    $rows = $data['rows'];
+@endphp
+
 @section('content')
     <div class="content-wrapper">
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">{{ $title }}</h1>
+                        <h1 class="m-0">{{ $data['title'] ?? '' }}</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">{{ $title }}</li>
+                            <li class="breadcrumb-item active">{{ $data['title'] ?? '' }}</li>
                         </ol>
                     </div>
                 </div>
@@ -32,8 +36,9 @@
                                     </div>
                                     <div class="col-6">
                                         <div class="float-right">
-                                            <a href="{{ route('admin.faq.create') }}" class="btn btn-primary">Add
-                                                New</a>
+                                            @if (Auth::user()->can('admin.faq.create'))
+                                            <a href="{{ route('admin.faq.create') }}" class="btn btn-primary">Add New</a>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -43,35 +48,40 @@
                                 <table id="dataTables" class="table table-hover text-nowrap jsgrid-table">
                                     <thead>
                                         <tr>
-                                            <th width="5%">SL</th>
-                                            <th width="10%">Question</th>
-                                            <th width="10%">Answer</th>
-                                            <th width="10%">Published Status</th>
-                                            <th width="10%">Order Number</th>
-                                            <th width="10%">Action</th>
+                                            <th>SL</th>
+                                            <th>Question</th>
+                                            <th>Answer</th>
+                                            <th>Published Status</th>
+                                            <th>Order Number</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($rows as $item)
+                                        @foreach ($rows as $key => $row)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $item->title }}</td>
-                                                <td>{!! Str::limit($item->body, 50 , '...') !!}</td>
+                                                <td>{{ $row->title }}</td>
+                                                <td>{!! Str::limit($row->body, 50 , '...') !!}</td>
                                                 <td>
-                                                    @if ($item->is_active == 1)
+                                                    @if ($row->is_active == 1)
                                                     <span class="badge badge-success">Active</span>
                                                     @else
                                                     <span class="badge badge-danger">Inactive</span>
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    {{ $item->order_id }}
+                                                    {{ $row->order_id }}
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('admin.faq.view', $item->id) }}" class="btn btn-primary">View</a>
-                                                    <a href="{{ route('admin.faq.edit', $item->id) }}"
-                                                        class="btn btn-secondary">Edit</a>
-                                                    <a href="{{ route('admin.faq.delete', $item->id) }}" id="deleteData" class="btn btn-danger">Delete</a>
+
+                                                    @if (Auth::user()->can('admin.faq.edit'))
+                                                    <a href="javascript:void(0)" class="btn btn-secondary edit btn-xs" data-id="{{$row->id}}">Edit</a>
+                                                    @endif
+
+                                                    @if (Auth::user()->can('admin.faq.delete'))
+                                                    <a href="{{ route('admin.faq.delete',$row->id) }}" id="deleteData" class="btn btn-danger btn-xs">Delete</a>
+                                                    @endif
+
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -86,3 +96,17 @@
         </div>
     </div>
 @endsection
+
+
+@push('script')
+<script type="text/javascript">
+    $(document).on('click', '.edit', function() {
+        let id = $(this).data('id');
+        $.get('faq/'+id+'/edit', function(data) {
+            console.log(data);
+            $('#editCategoryModal').modal('show');
+            $('#modal_body').html(data);
+        });
+    });
+</script>
+@endpush
