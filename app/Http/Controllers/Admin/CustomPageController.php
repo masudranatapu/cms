@@ -8,13 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class CustomPageController extends Controller
 {
-    // protected $page;
-    // public function __construct(
-    //     CustomPage $page
-    // )
-    // {
-    //     $this->page     = $page;
-    // }
 
 
     public $user;
@@ -31,19 +24,31 @@ class CustomPageController extends Controller
 
 
     public function index(Request $request){
-        $this->resp = $this->page->getPaginatedList($request);
 
+        if (is_null($this->user) || !$this->user->can('admin.cpage.index')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
 
-        return view('admin.custom-page.index')->withData($this->resp->data);
+        $data['title'] = 'Custom Page List';
+        $data['rows'] = CustomPage::get();
+        return view('admin.custom-page.index',compact('data'));
     }
 
      public function create(){
-        $data = [];
-        return view('admin.custom-page.create')->withData($data);
+        if (is_null($this->user) || !$this->user->can('admin.cpage.create')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
+
+        $data['title'] = 'Custom Page Create';
+        return view('admin.custom-page.create',compact('data'));
     }
 
     public function store(Request $request)
     {
+        if (is_null($this->user) || !$this->user->can('admin.cpage.store')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
+
         $this->resp = $this->page->postStore($request);
         if (!$this->resp->status) {
             return redirect()->back()->with($this->resp->redirect_class, $this->resp->msg);
@@ -54,35 +59,40 @@ class CustomPageController extends Controller
     }
 
 
-    public function edit()
+    public function edit($id)
     {
+        if (is_null($this->user) || !$this->user->can('admin.cpage.edit')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
 
-        // if (is_null($this->user) || !$this->user->can('admin.cpage.edit')) {
-        //     abort(403, 'Sorry !! You are Unauthorized.');
-        // }
-
-        //   $this->resp = $this->page->getShow($id);
-        //   if (!$this->resp->status) {
-        //     return redirect()->back()->with($this->resp->redirect_class, $this->resp->msg);
-        // }
-        return view('admin.custom-page.edit');
+        $data['title'] = 'Custom Page edit';
+        $data['row'] = CustomPage::find($id);
+        return view('admin.custom-page.edit',compact('data'));
     }
 
-    public function update ()
+    public function update(Request $request, $id)
     {
-        // $this->resp = $this->page->putUpdate ($request, $id);
-        // if (!$this->resp->status) {
-        //     return redirect()->back()->with($this->resp->redirect_class, $this->resp->msg);
-        //     Toastr::error(trans($this->resp->msg), 'Error', ["positionClass" => "toast-top-center"]);
-        // }
-        // Toastr::success(trans($this->resp->msg), 'Success', ["positionClass" => "toast-top-center"]);
+
+        $this->resp = $this->page->putUpdate($request, $id);
+        if (!$this->resp->status) {
+            return redirect()->back()->with($this->resp->redirect_class, $this->resp->msg);
+            Toastr::error(trans($this->resp->msg), 'Error', ["positionClass" => "toast-top-center"]);
+        }
+        Toastr::success(trans($this->resp->msg), 'Success', ["positionClass" => "toast-top-center"]);
         return redirect()->route($this->resp->redirect_to)->with($this->resp->redirect_class, $this->resp->msg);
     }
 
 
-    public function view()
+    public function view($id)
     {
-        return view('admin.custom-page.view');
+        if (is_null($this->user) || !$this->user->can('admin.cpage.view')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
+
+        $data['title'] = 'Custom Page View';
+        $data['row'] = CustomPage::find($id);
+
+        return view('admin.custom-page.view',compact('data'));
     }
 
 

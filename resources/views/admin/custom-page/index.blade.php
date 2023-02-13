@@ -1,17 +1,22 @@
 @extends('admin.layouts.master')
 @section('title') {{ $data['title'] ?? '' }} @endsection
+@section('cpage', 'active')
+@php
+    $rows = $data['rows'];
+@endphp
+
 @section('content')
 <div class="content-wrapper">
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Custom Page</h1>
+                    <h1 class="m-0">{{ $data['title'] ?? '' }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Custom Page</li>
+                        <li class="breadcrumb-item active">{{ $data['title'] ?? '' }}</li>
                     </ol>
                 </div>
             </div>
@@ -26,12 +31,14 @@
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col-6">
-                                    <h3 class="card-title">Manage Custom Page</h3>
+                                    <h3 class="card-title">Manage {{ $data['title'] ?? '' }}</h3>
                                 </div>
                                 <div class="col-6">
                                     <div class="float-right">
+                                        @if (Auth::user()->can('admin.cpage.index'))
                                         <a href="{{ route('admin.cpage.create') }}" class="btn btn-primary">Add
                                             New</a>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -43,25 +50,40 @@
                                     <tr>
                                         <th>Sl</th>
                                         <th>Page Name</th>
-                                        <th>Page Slug</th>
-                                        <th>Description</th>
                                         <th>Published Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>01</td>
-                                        <td>Privacy Policy</td>
-                                        <td>privacy-policy</td>
-                                        <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. ....</td>
-                                        <td><span class="badge badge-success">Published</span></td>
-                                        <td>
-                                            <a href="{{ route('admin.cpage.view') }}" class="btn btn-primary">View</a>
-                                            <a href="{{ route('admin.cpage.edit') }}" class="btn btn-secondary">Edit</a>
-                                            <a href="#" id="deleteData" class="btn btn-danger">Delete</a>
-                                        </td>
-                                    </tr>
+                                    @foreach ($rows as $key => $row)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $row->title }}</td>
+                                            <td>
+                                                @if ($row->is_active == 1)
+                                                <span class="badge badge-success">Active</span>
+                                                @else
+                                                <span class="badge badge-danger">Inactive</span>
+                                                @endif
+                                            </td>
+
+                                            <td>
+
+                                                @if (Auth::user()->can('admin.cpage.view'))
+                                                <a href="{{ route('admin.cpage.view',$row->id) }}" class="btn btn-xs btn-secondary btn-xs" >View</a>
+                                                @endif
+
+                                                @if (Auth::user()->can('admin.cpage.edit'))
+                                                <a href="{{ route('admin.cpage.edit',$row->id) }}" class="btn btn-xs btn-secondary btn-xs" >Edit</a>
+                                                @endif
+
+                                                @if (Auth::user()->can('admin.cpage.delete'))
+                                                <a href="{{ route('admin.cpage.delete',$row->id) }}" id="deleteData" class="btn btn-xs btn-danger btn-xs">Delete</a>
+                                                @endif
+
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

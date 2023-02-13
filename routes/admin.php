@@ -60,16 +60,20 @@ Route::get('/smtp',[MailController::class,'mailview'])->name('settings.Smtp.mail
     Route::get('/cc', 'DashboardController@cacheClear')->name('cacheClear');
     Route::get('settings', ['as' => 'settings', 'uses' => 'SettingsController@settings']);
 
-    //Custom Page
-    Route::get('cpage/index', ['as' => 'cpage.index', 'uses' => 'CustomPageController@index']);
-    Route::get('cpage/create', ['as' => 'cpage.create', 'uses' => 'CustomPageController@create']);
-    Route::post('cpage/id/store', ['as' => 'cpage.store', 'uses' => 'CustomPageController@store']);
-    Route::get('cpage/edit', ['as' => 'cpage.edit', 'uses' => 'CustomPageController@edit']);
-    Route::get('cpage/view', ['as' => 'cpage.view', 'uses' => 'CustomPageController@view']);
-    Route::post('cpage/{id}/update', ['as' => 'cpage.update', 'uses' => 'CustomPageController@update']);
-    Route::get('cpage/{id}/delete', ['as' => 'cpage.delete', 'uses' => 'CustomPageController@delete']);
+
 
     Route::get('ajax/text-editor/image', ['as' => 'text-editor.image', 'uses' => 'CustomPageController@postEditorImageUpload']);
+
+    //Custom Page
+    Route::group(['prefix' => 'cpage', 'as' => 'cpage.'], function () {
+        Route::get('/', 'CustomPageController@index')->name('index');
+        Route::get('create', 'CustomPageController@create')->name('create');
+        Route::post('store', 'CustomPageController@store')->name('store');
+        Route::get('{id}/view', 'CustomPageController@view')->name('view');
+        Route::get('{id}/edit', 'CustomPageController@edit')->name('edit');
+        Route::post('{id}/update', 'CustomPageController@update')->name('update');
+        Route::get('delete', 'CustomPageController@delete')->name('delete');
+    });
 
 
     //Faq
@@ -77,9 +81,9 @@ Route::get('/smtp',[MailController::class,'mailview'])->name('settings.Smtp.mail
         Route::get('/', 'FaqController@index')->name('index');
         Route::get('create', 'FaqController@create')->name('create');
         Route::post('store', 'FaqController@store')->name('store');
-        Route::get('view/{id}', 'FaqController@view')->name('view');
-        Route::get('edit/{id}', 'FaqController@edit')->name('edit');
-        Route::post('update/{id}', 'FaqController@update')->name('update');
+        Route::get('{id}/view', 'FaqController@view')->name('view');
+        Route::get('{id}/edit', 'FaqController@edit')->name('edit');
+        Route::post('{id}/update', 'FaqController@update')->name('update');
         Route::get('delete', 'FaqController@delete')->name('delete');
     });
 
@@ -165,13 +169,13 @@ Route::get('/smtp',[MailController::class,'mailview'])->name('settings.Smtp.mail
 
 
     // industry
-    Route::group(['prefix' => 'insdustries', 'as' => 'industry.'], function () {
-        Route::get('/', 'InsdustryController@index')->name('index');
-        Route::get('create', 'InsdustryController@create')->name('create');
-        Route::post('store', 'InsdustryController@store')->name('store');
-        Route::get('edit/{slug}', 'InsdustryController@edit')->name('edit');
-        Route::post('update/{slug}', 'InsdustryController@update')->name('update');
-        Route::get('delete/{id}', 'InsdustryController@delete')->name('delete');
+    Route::group(['prefix' => 'customer', 'as' => 'customer.'], function () {
+        Route::get('/', 'CustomerController@index')->name('index');
+        Route::get('create', 'CustomerController@create')->name('create');
+        Route::post('store', 'CustomerController@store')->name('store');
+        Route::get('{id}/edit', 'CustomerController@edit')->name('edit');
+        Route::post('{id}/update', 'CustomerController@update')->name('update');
+        Route::get('{id}/delete', 'CustomerController@delete')->name('delete');
     });
 
     // location

@@ -74,12 +74,16 @@
                                                 </td>
                                                 <td>
 
+                                                    @if (Auth::user()->can('admin.faq.view'))
+                                                    <a href="{{ route('admin.faq.view',$row->id) }}" class="btn btn-xs btn-secondary btn-xs" >View</a>
+                                                    @endif
+
                                                     @if (Auth::user()->can('admin.faq.edit'))
-                                                    <a href="javascript:void(0)" class="btn btn-secondary edit btn-xs" data-id="{{$row->id}}">Edit</a>
+                                                    <a href="{{ route('admin.faq.edit',$row->id) }}" class="btn btn-xs btn-secondary btn-xs" >Edit</a>
                                                     @endif
 
                                                     @if (Auth::user()->can('admin.faq.delete'))
-                                                    <a href="{{ route('admin.faq.delete',$row->id) }}" id="deleteData" class="btn btn-danger btn-xs">Delete</a>
+                                                    <a href="{{ route('admin.faq.delete',$row->id) }}" id="deleteData" class="btn btn-xs btn-danger btn-xs">Delete</a>
                                                     @endif
 
                                                 </td>
@@ -95,18 +99,11 @@
             </div>
         </div>
     </div>
+
+
 @endsection
 
 
 @push('script')
-<script type="text/javascript">
-    $(document).on('click', '.edit', function() {
-        let id = $(this).data('id');
-        $.get('faq/'+id+'/edit', function(data) {
-            console.log(data);
-            $('#editCategoryModal').modal('show');
-            $('#modal_body').html(data);
-        });
-    });
-</script>
+
 @endpush

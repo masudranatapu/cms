@@ -143,7 +143,7 @@
                 </li>
                 @endif
 
-
+{{--
 
                 <li class="nav-item ">
                     <a href="javascript:;" class="nav-link ">
@@ -169,15 +169,18 @@
                         </li>
 
                     </ul>
-                </li>
+                </li> --}}
 
+
+                @if (Auth::user()->can('admin.customer.index'))
                 <li class="nav-item">
-                    <a href="{{ route('admin.user.index') }}"
-                        class="nav-link @yield('user')">
+                    <a href="{{ route('admin.customer.index') }}"
+                        class="nav-link @yield('customer')">
                         <i class=" fa fa-users"></i>
-                        {{ __('User') }}
+                        {{ __('Customer') }}
                     </a>
                 </li>
+                @endif
 
 
 
@@ -185,10 +188,7 @@
                 <li class="nav-item">
                     <a href="{{ route('admin.settings') }}" class="nav-link @yield('settings')">
                         <i class="nav-icon far fa-envelope"></i>
-                        <p>
-                            Settings
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
+                        <p>Settings<i class="fas fa-angle-left right"></i></p>
                     </a>
 
                     <ul class="nav nav-treeview">

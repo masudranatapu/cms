@@ -1,5 +1,6 @@
 @extends('admin.layouts.master')
-@section('faq_create', 'active')
+@section('faq', 'active')
+
 @section('title') {{ $data['title'] ?? '' }} @endsection
 @section('content')
 <div class="content-wrapper">

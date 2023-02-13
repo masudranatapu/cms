@@ -1,19 +1,26 @@
 @extends('admin.layouts.master')
-@section('cpage_create', 'active')
+@section('cpage', 'active')
 @section('title') {{ $data['title'] ?? '' }} @endsection
+
+@php
+
+$row = $data['row'];
+
+@endphp
+
 @section('content')
 <div class="content-wrapper">
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Custome Page Edit</h1>
+                    <h1 class="m-0">{{ $data['title'] ?? '' }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.cpage.index') }}">Manage Custome Page</a>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.cpage.index') }}">Manage {{ $data['title'] ?? '' }}</a>
                         </li>
-                        <li class="breadcrumb-item active">Custome Page Edit</li>
+                        <li class="breadcrumb-item active">{{ $data['title'] ?? '' }}</li>
                     </ol>
                 </div>
             </div>
@@ -28,7 +35,7 @@
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col-6">
-                                    <h3 class="card-title"> Custome Page Edit</h3>
+                                    <h3 class="card-title"> {{ $data['title'] ?? '' }}</h3>
                                 </div>
                                 <div class="col-6">
                                     <div class="float-right">
@@ -39,34 +46,35 @@
                         </div>
 
                         <div class="card-body table-responsive p-4">
-                            <form action="#" method="post" enctype="multipart/form-data">
+                            <form action="{{ route('admin.cpage.update',$row->id) }}" method="post" enctype="multipart/form-data">
+                                @csrf
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <div class="form-group">
-                                            <label for="name" class="form-lable">Page Name</label>
-                                            <input type="text" name="name" id="name" class="form-control" required>
+                                            <label for="title" class="form-lable">Page Name</label>
+                                            <input type="text" name="title" id="title" class="form-control" required value="{{ $row->title }}" >
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label for="slug" class="form-lable">Page Slug</label>
-                                            <input type="text" name="slug" id="slug" class="form-control" required>
+                                            <input type="text" name="slug" id="slug" class="form-control" required value="{{ $row->url_slug }}"  >
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label for="status" class="form-lable">Published Status</label>
                                             <select name="status" id="status" class="form-control">
-                                                <option value="1">Published</option>
-                                                <option value="0">Unpublished</option>
+                                                <option value="1" {{ $row->is_active == 1 ? 'selected' : '' }} >Published</option>
+                                                <option value="0" {{ $row->is_active == 0 ? 'selected' : '' }}>Unpublished</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div class="form-group">
                                             <label for="status" class="form-lable">Description</label>
-                                            <textarea name="description" id="summernote" cols="30" rows="5"
-                                                class="form-control" required></textarea>
+                                            <textarea name="body" id="summernote" cols="30" rows="5"
+                                                class="form-control" required>{!! $row->body !!}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
@@ -84,6 +92,5 @@
         </div>
     </div>
 </div>
-
 
 @endsection

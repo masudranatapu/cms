@@ -82,7 +82,9 @@ class FaqController extends Controller
             abort(403, 'Sorry !! You are Unauthorized.');
         }
 
-        $data =  Faq::find($id);
+
+        $data['title'] = 'FAQ Edit';
+        $data['row'] = Faq::find($id);
         return view('admin.faq.edit', compact('data'));
     }
 
@@ -124,7 +126,9 @@ class FaqController extends Controller
             abort(403, 'Sorry !! You are Unauthorized.');
         }
 
-        $data =  Faq::find($id);
+        $data['title'] = 'FAQ Edit';
+        $data['row'] = Faq::find($id);
+
         return view('admin.faq.view', compact('data'));
     }
 

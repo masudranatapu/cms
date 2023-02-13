@@ -1,7 +1,11 @@
 @extends('admin.layouts.master')
-@section('cpage_create', 'active')
+@section('cpage', 'active')
 @section('title') {{ $data['title'] ?? '' }} @endsection
-@section('content')
+
+@php
+    $row = $data['row'];
+@endphp
+
 @push('style')
 <style>
     td {
@@ -9,18 +13,20 @@
     }
 </style>
 @endpush
+
+@section('content')
 <div class="content-wrapper">
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Custome Page View</h1>
+                    <h1 class="m-0">{{ $data['title'] ?? '' }}</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.cpage.index') }}">Manage Custome Page</a>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.cpage.index') }}">Manage {{ $data['title'] ?? '' }}</a>
                         </li>
-                        <li class="breadcrumb-item active">Custome Page View</li>
+                        <li class="breadcrumb-item active">{{ $data['title'] ?? '' }}</li>
                     </ol>
                 </div>
             </div>
@@ -35,7 +41,7 @@
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col-6">
-                                    <h3 class="card-title"> Custome Page View</h3>
+                                    <h3 class="card-title"> {{ $data['title'] ?? '' }}</h3>
                                 </div>
                                 <div class="col-6">
                                     <div class="float-right">
@@ -48,21 +54,25 @@
                         <table class="table">
                             <tr>
                                 <td>Page Name</td>
-                                <td>Privacy Policy</td>
+                                <td>{{ $row->title }}</td>
                             </tr>
                             <tr>
                                 <td>Page Slug</td>
-                                <td>privacy-policy</td>
+                                <td>{{ $row->url_slug }}</td>
                             </tr>
                             <tr>
                                 <td>Publihed Status</td>
-                                <td><span class="badge badge-success">Active</span></td>
+                                <td>
+                                    @if ($row->is_active == 1)
+                                        <span class="badge badge-success">Active</span>
+                                    @else
+                                        <span class="badge badge-danger">Inactive</span>
+                                    @endif
+                                </td>
                             </tr>
                             <tr>
-                                <td>Description</td>
-                                <td>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fuga at quis a fugiat
-                                    omnis aperiam illum animi harum expedita molestiae odit, hic beatae optio fugit
-                                    accusantium quae molestias unde vel!</td>
+                                <td>Description </td>
+                                <td>{!! $row->body !!}</td>
                             </tr>
                         </table>
 
