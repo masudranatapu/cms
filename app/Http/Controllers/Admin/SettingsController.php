@@ -31,7 +31,7 @@ class SettingsController extends Controller
 
 
     // Setting
-    public function settings()
+    public function general()
     {
         $data['title']  = 'Settings';
         $timezonelist   = DateTimeZone::listIdentifiers(DateTimeZone::ALL);

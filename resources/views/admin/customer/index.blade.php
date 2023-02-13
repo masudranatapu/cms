@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 
-@section('category', 'active')
+@section('customer', 'active')
 @section('title') {{ $data['title'] ?? '' }} @endsection
 
 @push('style')
@@ -51,9 +51,10 @@
                                 <thead>
                                     <tr>
                                         <th width="5%">SL</th>
-                                        <th width="25%">Category Name</th>
-                                        <th width="15%">Order Number</th>
-                                        <th width="15%">Published Status</th>
+                                        <th width="25%">Name</th>
+                                        <th width="15%">Email</th>
+                                        <th width="15%">Status</th>
+                                        <th width="15%">Register At</th>
                                         <th width="15%">Action</th>
                                     </tr>
                                 </thead>
@@ -61,25 +62,31 @@
                                     @if(isset($data['rows']) && count($data['rows'])>0)
                                     @foreach ($data['rows'] as $key=> $row)
                                         <tr>
-                                        <td>{{$key + 1}}</td>
-                                        <td>{{ $row->name}}</td>
-                                        <td>{{$row->order_number}}</td>
+                                        <td>{{ $key + 1 }}</td>
+                                        <td>{{ $row->name }}</td>
+                                        <td>{{ $row->email }}</td>
                                         <td>
                                             @if ($row->status == 1)
-                                                <span class="badge badge-success">Published</span>
+                                                <span class="badge badge-success">Active</span>
                                             @else
-                                                <span class="badge badge-danger">Unpublished</span>
+                                                <span class="badge badge-danger">Inactive</span>
                                             @endif
 
                                         </td>
+                                        <td>{{ $row->created_at }}</td>
                                         <td>
-                                            @if (Auth::user()->can('admin.category.edit'))
+                                            @if (Auth::user()->can('admin.customer.view'))
+                                            <a href="javascript:void(0)" class="btn btn-secondary view btn-xs" data-id="{{$row->id}}">View</a>
+                                            @endif
+
+                                            @if (Auth::user()->can('admin.customer.edit'))
                                             <a href="javascript:void(0)" class="btn btn-secondary edit btn-xs" data-id="{{$row->id}}">Edit</a>
                                             @endif
 
-                                            @if (Auth::user()->can('admin.category.delete'))
-                                            <a href="{{ route('admin.category.delete',$row->id) }}" id="deleteData" class="btn btn-danger btn-xs">Delete</a>
+                                            @if (Auth::user()->can('admin.customer.delete'))
+                                            <a href="{{ route('admin.customer.delete',$row->id) }}" id="deleteData" class="btn btn-danger btn-xs">Delete</a>
                                             @endif
+
                                         </td>
                                     </tr>
                                     @endforeach

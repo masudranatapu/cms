@@ -185,16 +185,16 @@
 
 
 
-                <li class="nav-item">
-                    <a href="{{ route('admin.settings') }}" class="nav-link @yield('settings')">
+                <li class="nav-item @yield('settings_menu') ">
+                    <a href="{{ route('admin.settings') }}" class="nav-link ">
                         <i class="nav-icon far fa-envelope"></i>
                         <p>Settings<i class="fas fa-angle-left right"></i></p>
                     </a>
 
-                    <ul class="nav nav-treeview">
+                    <ul class="nav nav-treeview @yield('settings_menu')">
                         <li class="nav-item">
-                            <a href="{{ route('admin.settings.General.general') }}"
-                                class="nav-link">
+                            <a href="{{ route('admin.settings.general') }}"
+                                class="nav-link @yield('general')">
                                 <i class="fas fa-cog nav-icon"></i>
                                 <p>General Settings</p>
                             </a>

@@ -1,6 +1,8 @@
 @extends('admin.layouts.master')
 
-@section('settings', 'active')
+
+@section('settings_menu', 'menu-open')
+@section('general', 'active')
 
 @section('title') {{ $data['title'] ?? '' }} @endsection
 
@@ -36,7 +38,6 @@
 
                             <div class="card-body">
                                 <div class="row">
-                                    {{-- Site Settings --}}
                                     <div class="col-12">
                                         <div class="card">
                                             <div class="card-header">
@@ -46,10 +47,35 @@
                                                 <form action="#" method="post">
                                                     <div class="row">
                                                         <div class="col-lg-6">
-                                                            @if ($settings->seo_image)
-                                                                <img src="{{ asset($settings->seo_image) }}"
-                                                                    class="img-fluid" width="50px" />
-                                                            @endif
+                                                            <img src="{{ getLogo($settings->site_logo) }}"
+                                                                     height="50px" />
+                                                            <div class="mb-3">
+                                                                <div class="form-label">{{ __('Site Logo') }} <span
+                                                                        class="text-danger">
+                                                                        ({{ __('Recommended size : 180x60') }})</span>
+                                                                </div>
+                                                                <input type="file" class="form-control" name="site_logo"
+                                                                    placeholder="{{ __('Site Logo') }}..."
+                                                                    accept=".png,.jpg,.jpeg,.gif,.svg" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <img src="{{ getLogo($settings->admin_logo) }}"
+                                                                     height="50px" />
+
+                                                            <div class="mb-3">
+                                                                <div class="form-label">{{ __('Admin Logo') }} <span class="text-danger">({{ __('Recommended size : 180x60') }})</span>
+                                                                </div>
+                                                                <input type="file" class="form-control" name="admin_logo"
+                                                                    placeholder="{{ __('admin logo') }}..."
+                                                                    accept=".png,.jpg,.jpeg,.gif,.svg" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+
+                                                            <img src="{{ getSeoImage($settings->seo_image) }}"
+                                                                     height="50px" />
+
                                                             <div class="mb-3">
                                                                 <div class="form-label">{{ __('SEO image') }} <span
                                                                         class="text-danger">
@@ -62,24 +88,9 @@
                                                         </div>
 
                                                         <div class="col-lg-6">
-                                                            @if ($settings->site_logo)
-                                                                <img src="{{ asset($settings->site_logo) }}"
-                                                                    class="img-fluid" width="150px" />
-                                                            @endif
-                                                            <div class="mb-3">
-                                                                <div class="form-label">{{ __('Site Logo') }} <span
-                                                                        class="text-danger">
-                                                                        ({{ __('Recommended size : 180x60') }})</span>
-                                                                </div>
-                                                                <input type="file" class="form-control" name="site_logo"
-                                                                    placeholder="{{ __('Site Logo') }}..."
-                                                                    accept=".png,.jpg,.jpeg,.gif,.svg" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-6">
                                                             @if ($settings->favicon)
-                                                                <img src="{{ asset($settings->favicon) }}"
-                                                                    class="img-fluid" width="50px" />
+                                                                <img src="{{ getIcon($settings->favicon) }}"
+                                                                     height="50px" />
                                                             @endif
                                                             <div class="mb-3">
                                                                 <div class="form-label">{{ __('Favicon') }} <span
@@ -91,6 +102,7 @@
                                                                     accept=".png,.jpg,.jpeg,.gif,.svg" />
                                                             </div>
                                                         </div>
+
                                                         <div class="col-lg-6">
                                                             <div class="mb-3">
                                                                 <label class="form-label">{{ __('App Name') }}</label>
@@ -120,8 +132,7 @@
                                                         <div class="col-12">
                                                             <div class="mb-3">
                                                                 <label
-                                                                    class="form-label required">{{ __('SEO Meta
-                                                                                                                                                                                                        Description') }}</label>
+                                                                    class="form-label required">{{ __('SEO Meta Description') }}</label>
                                                                 <textarea class="form-control" name="seo_meta_desc" rows="3" placeholder="{{ __('SEO Meta Description') }}"
                                                                     style="height: 120px !important;" required>{{ $settings->seo_meta_description }}</textarea>
                                                             </div>
@@ -330,7 +341,7 @@
                                             <div class="card-body">
                                                 <form action="#" method="post">
                                                     <div class="row">
-                                                        <div class="col-lg-6">
+                                                        <div class="col-lg-12">
                                                             <div class="mb-3">
                                                                 <label
                                                                     class="form-label required">{{ __('Mode') }}</label>
@@ -346,7 +357,7 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-6">
+                                                        <div class="col-lg-12">
                                                             <div class="mb-3">
                                                                 <label
                                                                     class="form-label required">{{ __('Client Key') }}</label>
@@ -356,7 +367,7 @@
                                                                     placeholder="{{ __('Client Key') }}..." required>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-6">
+                                                        <div class="col-lg-12">
                                                             <div class="mb-3">
                                                                 <label class="form-label"
                                                                     required>{{ __('Secret') }}</label>
@@ -374,6 +385,64 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    {{-- strip setting --}}
+                                    <div class="col-lg-6">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3 class="card-title">Strip Settings</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <form action="#" method="post">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="mb-3">
+                                                                <label
+                                                                    class="form-label required">{{ __('Mode') }}</label>
+                                                                <select type="text" class="form-select form-control"
+                                                                    placeholder="Select a payment mode"
+                                                                    id="select-tags-advanced" name="paypal_mode" required>
+                                                                    <option value="sandbox"
+                                                                        {{ $config[3]->config_value == 'sandbox' ? 'selected' : '' }}>
+                                                                        {{ __('Sandbox') }}</option>
+                                                                    <option value="live"
+                                                                        {{ $config[3]->config_value == 'live' ? 'selected' : '' }}>
+                                                                        {{ __('Live') }}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-12">
+                                                            <div class="mb-3">
+                                                                <label class="form-label required">{{ __('Publishable Key') }}</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="stripe_publishable_key"
+                                                                    value="{{ $config[9]->config_value }}"
+                                                                    placeholder="{{ __('Publishable Key') }}..."
+                                                                    required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12">
+                                                            <div class="mb-3">
+                                                                <label
+                                                                    class="form-label required">{{ __('Secret') }}</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="stripe_secret"
+                                                                    value="{{ $config[10]->config_value }}"
+                                                                    placeholder="{{ __('Secret') }}..." required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <button type="submit" class="btn btn-success">Save</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
                                     {{-- Social --}}
                                     <div class="col-lg-6">
                                         <div class="card">
@@ -473,49 +542,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    {{-- strip setting --}}
-                                    <div class="col-lg-6">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h3 class="card-title">Strip Settings</h3>
-                                            </div>
-                                            <div class="card-body">
-                                                <form action="#" method="post">
-                                                    <div class="row">
-                                                        <div class="col-lg-6">
-                                                            <div class="mb-3">
-                                                                <label
-                                                                    class="form-label required">{{ __('Publishable
-                                                                                                                                                                                                        Key') }}</label>
-                                                                <input type="text" class="form-control"
-                                                                    name="stripe_publishable_key"
-                                                                    value="{{ $config[9]->config_value }}"
-                                                                    placeholder="{{ __('Publishable Key') }}..."
-                                                                    required>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-6">
-                                                            <div class="mb-3">
-                                                                <label
-                                                                    class="form-label required">{{ __('Secret') }}</label>
-                                                                <input type="text" class="form-control"
-                                                                    name="stripe_secret"
-                                                                    value="{{ $config[10]->config_value }}"
-                                                                    placeholder="{{ __('Secret') }}..." required>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <button type="submit" class="btn btn-success">Save</button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
 
 
                                     {{-- Google Settings --}}

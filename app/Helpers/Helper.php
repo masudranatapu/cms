@@ -163,10 +163,26 @@ if (!function_exists('getIcon')) {
             if(file_exists($ppath)){
               return asset($path);
             } else {
-                return asset('assets/img/default.svg');
+                return asset('assets/images/default-icon.png');
            }
         }else{
-            return asset('assets/img/default.svg');
+            return asset('assets/images/default-icon.png');
+        }
+    }
+}
+
+if (!function_exists('getSeoImage')) {
+    function getSeoImage($path = null)
+    {
+        if($path){
+            $ppath = public_path($path);
+            if(file_exists($ppath)){
+              return asset($path);
+            } else {
+                return asset('assets/images/default-seo.png');
+           }
+        }else{
+            return asset('assets/images/default-seo.png');
         }
     }
 }
