@@ -1,101 +1,84 @@
 @extends('admin.layouts.master')
+@push('style')
 
-@section('title')
-    {{ $data['title'] ?? '' }}
-@endsection
-
+@endpush
+@section('blogDropdown', 'menu-open')
+@section('blog-category', 'active')
+@section('title') {{ $data['title'] ?? '' }} @endsection
 @section('content')
-    <div class="content-wrapper">
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1 class="m-0">{{ $data['title'] ?? 'Page Header' }}</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Dashboard</li>
-                        </ol>
-                    </div>
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">{{ $data['title'] ?? '' }}</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">{{ $data['title'] ?? '' }}</li>
+                    </ol>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-8">
-                    <form action="" method="">
-                        @csrf
-                        <div class="form-row align-items-center">
-                            <label for="">Set Default Language</label>
-                            <div class="col-auto my-1">
-                                <select name="code" class="custom-select mr-sm-2" id="inlineFormCustomSelect">
-                                    <option value="" hidden>{{ __('language') }}
-                                    <option value="">
-                                    </option>
-
-                                    </option>
-
-                                </select>
-                            </div>
-                            <div class="col-auto my-2 py-2 ">
-                                <button type="submit" class="btn btn-success "
-                                    style="margin-top:25px">{{ __('save') }}</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-md-12">
+                <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title" style="line-height: 36px;">{{ __('language_list') }}</h3>
-                            <a href=""
-                                class="btn bg-success float-right d-flex align-items-center justify-content-center">
-                                <i class="fas fa-plus"></i>
-                                &nbsp;
-                                {{ __('Add_language') }}
-                            </a>
+                            <div class="row align-items-center">
+                                <div class="col-6">
+                                    <h3 class="card-title">Manage {{ $data['title'] ?? '' }} </h3>
+                                </div>
+                                <div class="col-6">
+                                    <div class="float-right">
+                                        @if (Auth::user()->can('admin.blog-category.index'))
+                                        <a href="javascript:void(0)" data-toggle="modal" data-target="#addCategoryModal"
+                                            class="btn btn-primary">Add New</a>
+                                        @endif
 
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
                         <div class="card-body table-responsive p-0">
-                            <table class="table table-hover text-nowrap table-bordered">
+                            <table id="dataTables" class="table table-hover text-nowrap jsgrid-table">
                                 <thead>
                                     <tr>
-                                        <th width="5%">#</th>
-                                        <th>{{ __('name') }}</th>
-                                        <th>{{ __('code') }}</th>
-                                        <th>{{ __('direction') }}</th>
-                                        <th>{{ __('flag') }}</th>
-                                        <th width="15%">{{ __('actions') }}</th>
+                                        <th>SL</th>
+                                        <th>Name</th>
+                                        <th>Code</th>
+                                        <th>Direction</th>
+                                        <th >Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>English</td>
-                                        <td>en</td>
-                                        <td>ltr</td>
-                                        <td><i class="flag-icon"></i></td>
+                                    @if(isset($data['rows']) && count($data['rows'])>0)
+                                    @foreach ($data['rows'] as $key=> $row)
+                                        <tr>
+                                        <td>{{$key + 1}}</td>
+                                        <td>{{ $row->name}}</td>
+                                        <td>{{$row->code}}</td>
                                         <td>
-                                            <a href="" class="btn btn-secondary mr-2"><i class="fas fa-cog"></i></a>
-
-                                            <a href="javascript:void(0)"
-                                                class="btn btn-warning mt-0 mr-2"data-toggle="tooltip"
-                                                title="You can't delete or edit this language">
-
-                                                <i class="fas fa-lock"></i> </a>
-
-                                            <a href="" class="btn btn-info mt-0 mr-2"><i class="fas fa-edit"></i></a>
-                                            <form action="" class="d-inline" method="">
-                                                @csrf
-                                                <button data-toggle="tooltip" data-placement="top"
-                                                    title="{{ __('delete_language') }}"
-                                                    onclick="return confirm('{{ __('are_you_sure_want_to_delete_this_item?') }}');"
-                                                    class="btn bg-danger"><i class="fas fa-trash"></i></button>
-                                            </form>
+                                            {{ $row->direction }}
 
                                         </td>
+                                        <td>
+                                            @if (Auth::user()->can('admin.blog-category.edit'))
+                                            <a href="javascript:void(0)" class="btn btn-secondary edit btn-xs" data-id="{{$row->id}}">Edit</a>
+                                            @endif
+
+                                            @if (Auth::user()->can('admin.blog-category.delete'))
+                                            <a href="{{ route('admin.blog-category.delete',$row->id) }}" id="deleteData" class="btn btn-danger btn-xs">Delete</a>
+                                            @endif
+                                        </td>
                                     </tr>
+                                    @endforeach
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -105,4 +88,79 @@
             </div>
         </div>
     </div>
+</div>
+
+{{-- create modal --}}
+<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('admin.blog-category.store') }}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <label for="name" class="form-label">Category Name</label>
+                        <input type="text" name="name" id="name" class="form-control" placeholder="Category name"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="order_number" class="form-label">Order Number</label>
+                        <input type="text" name="order_number" id="order_number" class="form-control" placeholder="Order Number"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="status" class="form-label">Published Status</label>
+                        <select name="status" id="status" class="form-control">
+                            <option value="1">Published</option>
+                            <option value="0">Unpublished</option>
+                        </select>
+                    </div>
+                    <div class="form-group float-right">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{-- edit modal --}}
+<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="modal_body"></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
+@push('script')
+<script type="text/javascript">
+    $(document).on('click', '.edit', function() {
+        let cat_id = $(this).data('id');
+        $.get('category/'+cat_id+'/edit', function(data) {
+            console.log(data);
+            $('#editCategoryModal').modal('show');
+            $('#modal_body').html(data);
+        });
+    });
+</script>
+@endpush
+

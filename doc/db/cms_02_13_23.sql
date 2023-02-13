@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 13, 2023 at 01:06 PM
+-- Generation Time: Feb 13, 2023 at 03:34 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -586,6 +586,32 @@ CREATE TABLE `invesments` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `languages`
+--
+
+CREATE TABLE `languages` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `code` varchar(255) NOT NULL,
+  `icon` varchar(255) NOT NULL,
+  `direction` varchar(3) NOT NULL DEFAULT 'ltr',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `languages`
+--
+
+INSERT INTO `languages` (`id`, `name`, `code`, `icon`, `direction`, `created_at`, `updated_at`) VALUES
+(1, 'English', 'en', 'flag-icon-gb', 'ltr', '2022-08-19 23:31:12', '2022-08-19 23:31:12'),
+(2, 'Chinese', 'zh', 'flag-icon-cn', 'ltr', '2022-12-20 09:15:21', '2022-12-21 09:46:38'),
+(3, 'French', 'fr', 'flag-icon-fr', 'ltr', '2022-12-20 12:47:11', '2022-12-20 12:47:11'),
+(4, 'Bislama', 'bi', 'flag-icon-vu', 'ltr', '2022-12-22 07:37:24', '2022-12-22 07:37:24');
 
 -- --------------------------------------------------------
 
@@ -1327,6 +1353,15 @@ ALTER TABLE `franchises`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `languages`
+--
+ALTER TABLE `languages`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `languages_name_unique` (`name`),
+  ADD UNIQUE KEY `languages_code_unique` (`code`),
+  ADD UNIQUE KEY `languages_icon_unique` (`icon`);
+
+--
 -- Indexes for table `migrations`
 --
 ALTER TABLE `migrations`
@@ -1497,6 +1532,12 @@ ALTER TABLE `faqs`
 --
 ALTER TABLE `franchises`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `languages`
+--
+ALTER TABLE `languages`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `migrations`

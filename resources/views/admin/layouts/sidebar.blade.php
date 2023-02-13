@@ -184,7 +184,6 @@
 
 
 
-
                 <li class="nav-item @yield('settings_menu') ">
                     <a href="{{ route('admin.settings') }}" class="nav-link ">
                         <i class="nav-icon far fa-envelope"></i>
@@ -200,7 +199,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.settings.Language.index') }}" class="nav-link">
+                            <a href="{{ route('admin.settings.language') }}" class="nav-link">
                                 <i class="fas fa-globe nav-icon"></i>
                                 <p>Language</p>
                             </a>

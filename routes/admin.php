@@ -50,7 +50,7 @@ Route::delete('/destroy/{brand}', [BrandController::class, 'destroy'])->name('ad
 
 Route::get('/sc',[SettingsController::class,'setview'])->name('settings.MobileApp.index');
 Route::get('/currency',[CurrencyController::class,'currenview'])->name('settings.Currency.index');
-Route::get('/languages',[LanguageController::class,'index'])->name('settings.Language.index');
+
 // Route::get('/general',[GeneralController::class,'genview'])->name('settings.General.general');
 Route::get('/smtp',[MailController::class,'mailview'])->name('settings.Smtp.mail');
 
@@ -67,6 +67,7 @@ Route::get('/smtp',[MailController::class,'mailview'])->name('settings.Smtp.mail
     Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
         Route::get('general', 'SettingsController@general')->name('general');
         Route::post('general/store', 'SettingsController@generalStore')->name('general_store');
+        Route::get('languages','LanguageController@index')->name('language');
     });
 
 
