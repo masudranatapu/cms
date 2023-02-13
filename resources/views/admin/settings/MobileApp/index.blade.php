@@ -30,8 +30,6 @@
                         </div>
                         <div class="card-body">
                             <form class="form-horizontal" action="" method="POST">
-
-
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="form-group">

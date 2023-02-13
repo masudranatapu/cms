@@ -12,5 +12,5 @@ class SettingsController extends Controller
         return view('admin.settings.MobileApp.index');
     }
 
-    
+
 }

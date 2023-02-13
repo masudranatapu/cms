@@ -30,25 +30,35 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="m-0">{{ __('Settings') }}</h5>
+                    @if (Session::get('success'))
+                        <div class="col-lg-12">
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ Session::get('success') }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
-
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h3 class="card-title">Site Settings</h3>
-                                            </div>
-                                            <div class="card-body">
-                                                <form action="#" method="post">
+                        </div>
+                    @endif
+                    <div class="col-lg-12">
+                        <form action="{{ route('admin.settings.general_store') }}" method="post"
+                            enctype="multipart/form-data" id="settingUpdate">
+                            @csrf
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="m-0">{{ __('Settings') }}</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">Site Settings</h3>
+                                                </div>
+                                                <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-lg-6">
-                                                            <img src="{{ getLogo($settings->site_logo) }}"
-                                                                     height="50px" />
+                                                            <img src="{{ getLogo($settings->site_logo) }}" height="50px" />
                                                             <div class="mb-3">
                                                                 <div class="form-label">{{ __('Site Logo') }} <span
                                                                         class="text-danger">
@@ -61,10 +71,11 @@
                                                         </div>
                                                         <div class="col-lg-6">
                                                             <img src="{{ getLogo($settings->admin_logo) }}"
-                                                                     height="50px" />
+                                                                height="50px" />
 
                                                             <div class="mb-3">
-                                                                <div class="form-label">{{ __('Admin Logo') }} <span class="text-danger">({{ __('Recommended size : 180x60') }})</span>
+                                                                <div class="form-label">{{ __('Admin Logo') }} <span
+                                                                        class="text-danger">({{ __('Recommended size : 180x60') }})</span>
                                                                 </div>
                                                                 <input type="file" class="form-control" name="admin_logo"
                                                                     placeholder="{{ __('admin logo') }}..."
@@ -74,7 +85,7 @@
                                                         <div class="col-lg-6">
 
                                                             <img src="{{ getSeoImage($settings->seo_image) }}"
-                                                                     height="50px" />
+                                                                height="50px" />
 
                                                             <div class="mb-3">
                                                                 <div class="form-label">{{ __('SEO image') }} <span
@@ -90,7 +101,7 @@
                                                         <div class="col-lg-6">
                                                             @if ($settings->favicon)
                                                                 <img src="{{ getIcon($settings->favicon) }}"
-                                                                     height="50px" />
+                                                                    height="50px" />
                                                             @endif
                                                             <div class="mb-3">
                                                                 <div class="form-label">{{ __('Favicon') }} <span
@@ -124,8 +135,8 @@
                                                             <div class="mb-3">
                                                                 <label
                                                                     class="form-label required">{{ __('Site Title') }}</label>
-                                                                <input type="text" class="form-control" name="site_title"
-                                                                    value="{{ $settings->site_title }}"
+                                                                <input type="text" class="form-control"
+                                                                    name="site_name" value="{{ $settings->site_name }}"
                                                                     placeholder="{{ __('Site Title') }}..." required>
                                                             </div>
                                                         </div>
@@ -151,23 +162,17 @@
                                                                     style="height: 120px !important;" required>{{ $settings->main_motto }}</textarea>
                                                             </div>
                                                         </div>
-                                                        <div class="col-12">
-                                                            <button type="submit" class="btn btn-success">Save</button>
-                                                        </div>
                                                     </div>
-                                                </form>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        <div class="col-lg-6">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">General Settings</h3>
+                                                </div>
+                                                <div class="card-body">
 
-                                    {{-- general setting --}}
-                                    <div class="col-lg-6">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h3 class="card-title">General Settings</h3>
-                                            </div>
-                                            <div class="card-body">
-                                                <form action="#" method="post">
                                                     <div class="row">
                                                         <div class="col-lg-6">
                                                             <div class="mb-3">
@@ -254,23 +259,19 @@
                                                                 @enderror
                                                             </div>
                                                         </div>
-                                                        <div class="col-12">
-                                                            <button type="submit" class="btn btn-success">Save</button>
-                                                        </div>
                                                     </div>
-                                                </form>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    {{-- email setting --}}
-                                    <div class="col-lg-6">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h3 class="card-title">Email Configuration Settings
-                                                </h3>
-                                            </div>
-                                            <div class="card-body">
-                                                <form action="#" method="post">
+                                        {{-- email setting --}}
+                                        <div class="col-lg-6">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">Email Configuration Settings
+                                                    </h3>
+                                                </div>
+                                                <div class="card-body">
+
                                                     <div class="row">
                                                         <div class="col-lg-6">
                                                             <div class="mb-3">
@@ -319,27 +320,18 @@
                                                                     placeholder="{{ __('Mailer Password') }}...">
                                                             </div>
                                                         </div>
-                                                        <div class="col-12">
-                                                            <button type="submit" class="btn btn-success">Save</button>
-                                                            <a href="{{ route('admin.test.email') }}"
-                                                                class="btn btn-primary">
-                                                                {{ __('Test Mail') }}
-                                                            </a>
-                                                        </div>
                                                     </div>
-                                                </form>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        {{-- paypal setting --}}
+                                        <div class="col-lg-6">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">Paypal Settings</h3>
+                                                </div>
+                                                <div class="card-body">
 
-                                    {{-- paypal setting --}}
-                                    <div class="col-lg-6">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h3 class="card-title">Paypal Settings</h3>
-                                            </div>
-                                            <div class="card-body">
-                                                <form action="#" method="post">
                                                     <div class="row">
                                                         <div class="col-lg-12">
                                                             <div class="mb-3">
@@ -377,23 +369,19 @@
                                                                     placeholder="{{ __('Secret') }}..." required>
                                                             </div>
                                                         </div>
-                                                        <div class="col-12">
-                                                            <button type="submit" class="btn btn-success">Save</button>
-                                                        </div>
                                                     </div>
-                                                </form>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    {{-- strip setting --}}
-                                    <div class="col-lg-6">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h3 class="card-title">Strip Settings</h3>
-                                            </div>
-                                            <div class="card-body">
-                                                <form action="#" method="post">
+                                        {{-- strip setting --}}
+                                        <div class="col-lg-6">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">Strip Settings</h3>
+                                                </div>
+                                                <div class="card-body">
+
                                                     <div class="row">
                                                         <div class="col-lg-12">
                                                             <div class="mb-3">
@@ -414,12 +402,12 @@
 
                                                         <div class="col-lg-12">
                                                             <div class="mb-3">
-                                                                <label class="form-label required">{{ __('Publishable Key') }}</label>
+                                                                <label
+                                                                    class="form-label required">{{ __('Publishable Key') }}</label>
                                                                 <input type="text" class="form-control"
                                                                     name="stripe_publishable_key"
                                                                     value="{{ $config[9]->config_value }}"
-                                                                    placeholder="{{ __('Publishable Key') }}..."
-                                                                    required>
+                                                                    placeholder="{{ __('Publishable Key') }}..." required>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-12">
@@ -432,29 +420,23 @@
                                                                     placeholder="{{ __('Secret') }}..." required>
                                                             </div>
                                                         </div>
-                                                        <div class="col-12">
-                                                            <button type="submit" class="btn btn-success">Save</button>
-                                                        </div>
                                                     </div>
-                                                </form>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        {{-- Social --}}
+                                        <div class="col-lg-6">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">Social URL</h3>
+                                                </div>
+                                                <div class="card-body">
 
-
-
-                                    {{-- Social --}}
-                                    <div class="col-lg-6">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h3 class="card-title">Social URL</h3>
-                                            </div>
-                                            <div class="card-body">
-                                                <form action="#" method="post">
                                                     <div class="row">
                                                         <div class="col-lg-6">
                                                             <div class="mb-3">
-                                                                <label class="form-label">{{ __('Facebook URL') }}</label>
+                                                                <label
+                                                                    class="form-label">{{ __('Facebook URL') }}</label>
                                                                 <input type="url" class="form-control"
                                                                     name="facebook_url"
                                                                     value="{{ $settings->facebook_url }}"
@@ -493,7 +475,8 @@
                                                         </div>
                                                         <div class="col-lg-6">
                                                             <div class="mb-3">
-                                                                <label class="form-label">{{ __('Linkedin url') }}</label>
+                                                                <label
+                                                                    class="form-label">{{ __('Linkedin url') }}</label>
                                                                 <input type="url" class="form-control"
                                                                     name="linkedin_url"
                                                                     value="{{ $settings->linkedin_url }}"
@@ -533,25 +516,18 @@
                                                                 @enderror
                                                             </div>
                                                         </div>
-                                                        <div class="col-12">
-                                                            <button type="submit" class="btn btn-success">Save</button>
-                                                        </div>
                                                     </div>
-
-                                                </form>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        {{-- Google Settings --}}
+                                        <div class="col-lg-6">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">Google Login</h3>
+                                                </div>
+                                                <div class="card-body">
 
-
-                                    {{-- Google Settings --}}
-                                    <div class="col-lg-6">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h3 class="card-title">Google Login</h3>
-                                            </div>
-                                            <div class="card-body">
-                                                <form action="#" method="post">
                                                     <div class="row">
                                                         <div class="col-lg-6">
                                                             <div class="mb-3">
@@ -581,24 +557,18 @@
                                                                 @enderror
                                                             </div>
                                                         </div>
-                                                        <div class="col-12">
-                                                            <button type="submit" class="btn btn-success">Save</button>
-                                                        </div>
                                                     </div>
-
-                                                </form>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        {{-- Facebook Settings --}}
+                                        <div class="col-lg-6">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">Facebook Login</h3>
+                                                </div>
+                                                <div class="card-body">
 
-                                    {{-- Facebook Settings --}}
-                                    <div class="col-lg-6">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h3 class="card-title">Facebook Login</h3>
-                                            </div>
-                                            <div class="card-body">
-                                                <form action="#" method="post">
                                                     <div class="row">
                                                         <div class="col-lg-6">
                                                             <div class="mb-3">
@@ -628,21 +598,24 @@
                                                                 @enderror
                                                             </div>
                                                         </div>
-                                                        <div class="col-12">
-                                                            <button type="submit" class="btn btn-success">Save</button>
-                                                        </div>
 
                                                     </div>
-                                                </form>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-
+                                </div>
+                                <div class="card-footer">
+                                    <div class="row">
+                                        <div class="col-md-12 text-center">
+                                            <button type="submit" class="btn btn-success"
+                                                id="updateButton">Update</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -652,4 +625,21 @@
 @endsection
 
 @push('script')
+    <script>
+        const form = document.getElementById("settingUpdate");
+        const submitButton = form.querySelector("button[type='submit']");
+
+        form.addEventListener("submit", function() {
+
+            $("#updateButton").html(`
+                <span id="">
+                    <span class="spinner-border spinner-border-sm text-white" role="status" aria-hidden="true"></span>
+                    Updating Setting...
+                </span>
+            `);
+
+            submitButton.disabled = true;
+
+        });
+    </script>
 @endpush
