@@ -74,7 +74,7 @@ class SettingsController extends Controller
     }
 
     // Update Setting
-    public function changeSettings(Request $request)
+    public function generalStore(Request $request)
     {
         // dd($request->all());
         DB::beginTransaction();
