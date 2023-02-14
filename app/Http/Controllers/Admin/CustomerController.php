@@ -4,12 +4,15 @@
 namespace App\Http\Controllers\Admin;
 
 use DB;
+use File;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use Intervention\Image\Facades\Image;
 
 class CustomerController extends Controller
 {
@@ -40,41 +43,60 @@ class CustomerController extends Controller
         return view('admin.customer.index', compact('data'));
     }
 
+    public function create(){
+        if (is_null($this->user) || !$this->user->can('admin.customer.create')) {
+            abort(403, 'Sorry !! You are Unauthorized.');
+        }
+        $data['title'] = 'Customer Create';
+        $data['roles'] = Role::orderBy('name', 'asc')->get();
+        return view('admin.customer.create', compact('data'));
+    }
 
     public function store(Request $request)
     {
-
         if (is_null($this->user) || !$this->user->can('admin.customer.store')) {
             abort(403, 'Sorry !! You are Unauthorized.');
         }
 
+        $this->validate($request, [
+            'name'           => 'required|max:100',
+            'email'         => 'required|unique:users,email,except,id',  
+            'role_id'        => 'required',
+            'password'       => 'required|min:6|max:11',
+            'phone'         => 'required|unique:users,phone',
+            'address'       => 'nullable',
+            'image'         => 'nullable',
+            'status'        => 'required',
+        ]);
+
         DB::beginTransaction();
         try {
-            $this->validate($request, [
-                'name'          => 'required|max:100',
-                'order_number'  => 'required',
-                'status'        => 'required'
-            ]);
+            if ($request->hasFile('image')) {
+                $image = Image::make($request->file('image'));
 
-            $slug = Str::slug($request->name);
-            $check_slug = User::where('slug',$slug)->first();
-            if($check_slug){
-                $slug = $slug.'_'.uniqid();
+                $imageName = time() . '-' . $request->file('image')->getClientOriginalName();
+                $destinationPath = public_path('assets/images/customer/');
+                $image->save($destinationPath . $imageName);
             }
 
-            $category = new Category();
-            $category->name         = $request->name;
-            $category->slug         = $slug;
-            $category->order_number = $request->order_number;
-            $category->status       = $request->status;
-            $category->save();
+            $customer = new User();
+            $customer->name          = $request->name;
+            $customer->role_id       = $request->role_id;
+            $customer->email         = $request->email;
+            $customer->password      = md5($request->password);
+            $customer->phone         = $request->phone;
+            $customer->image         = $imageName;
+            $customer->address       = $request->address;
+            $customer->status        = $request->status;
+
+            $customer->save();
         } catch (\Exception $e) {
             DB::rollback();
-            Toastr::error(trans('Category not Created !'), 'Error', ["positionClass" => "toast-top-center"]);
+            Toastr::error(trans('Customer not Created !'), 'Error', ["positionClass" => "toast-top-center"]);
             return redirect()->route('admin.customer.index');
         }
         DB::commit();
-        Toastr::success(trans('Category Successfully!'), 'Success', ["positionClass" => "toast-top-center"]);
+        Toastr::success(trans('Customer Created Successfully!'), 'Success', ["positionClass" => "toast-top-center"]);
         return redirect()->route('admin.customer.index');
     }
 
@@ -84,10 +106,10 @@ class CustomerController extends Controller
         if (is_null($this->user) || !$this->user->can('admin.customer.edit')) {
             abort(403, 'Sorry !! You are Unauthorized.');
         }
-
-        $category = User::find($id);
-        $html = view('admin.customer.edit', compact('category'))->render();
-        return response()->json($html);
+        $data['title'] = 'Customer Edit';
+        $data['user'] = User::find($id);
+        $data['role'] = Role::orderBy('name', 'asc')->get();
+        return view('admin.customer.edit', compact('data'));
     }
 
     public function update(Request $request, $id)
@@ -95,34 +117,50 @@ class CustomerController extends Controller
         if (is_null($this->user) || !$this->user->can('admin.customer.update')) {
             abort(403, 'Sorry !! You are Unauthorized.');
         }
-
+        $customer = User::find($id);
         DB::beginTransaction();
         try {
             $this->validate($request, [
-                'name'  => 'required|max:100',
-                'order_number'  => 'required',
-                'status' => 'required'
+                'name'           => 'required|max:100',
+                'email'         => 'required|unique:users,email,'. $customer->id,
+                'role_id'        => 'required',
+                'phone'          => 'required',
+                'address'       => 'nullable',
+                'image'         => 'nullable',
+                'status'        => 'required',
             ]);
 
-            $slug = Str::slug($request->name);
-            $check_slug = User::where('id','!=',$id)->where('slug',$slug)->first();
-            if($check_slug){
-                $slug = $slug.'_'.uniqid();
-            }
+            // $slug = Str::slug($request->name);
+            // $check_slug = User::where('id','!=',$id)->where('slug',$slug)->first();
+            // if($check_slug){
+            //     $slug = $slug.'_'.uniqid();
+            // }
 
-            $category = User::find($id);
-            $category->name         = $request->name;
-            $category->slug         = $slug;
-            $category->order_number = $request->order_number;
-            $category->status       = $request->status;
-            $category->save();
+            $customer->name          = $request->name;
+            $customer->role_id       = $request->role_id;
+            $customer->email         = $request->email;
+            $customer->phone         = $request->phone;
+            $customer->address       = $request->address;
+            $customer->status        = $request->status;
+
+            if ($request->hasFile('image')) {
+                $image = Image::make($request->file('image'));
+
+                $imageName = time() . '-' . $request->file('image')->getClientOriginalName();
+                $destinationPath = public_path('assets/images/customer/');
+                $image->save($destinationPath . $imageName);
+                $customer->image = $imageName;
+
+            }
+            $customer->save();
+
         } catch (\Exception $e) {
             DB::rollback();
-            Toastr::error(trans('Category not Updated !'), 'Error', ["positionClass" => "toast-top-center"]);
+            Toastr::error(trans('Customer not Updated !'), 'Error', ["positionClass" => "toast-top-center"]);
             return redirect()->route('admin.customer.index');
         }
         DB::commit();
-        Toastr::success(trans('Post Updated Successfully !'), 'Success', ["positionClass" => "toast-top-center"]);
+        Toastr::success(trans('Customer Updated Successfully !'), 'Success', ["positionClass" => "toast-top-center"]);
         return redirect()->route('admin.customer.index');
     }
 
@@ -134,28 +172,30 @@ class CustomerController extends Controller
             abort(403, 'Sorry !! You are Unauthorized.');
         }
 
-        $check = SubUser::where('category_id',$id)->first();
-        if($check){
-            Toastr::error(trans('Delete category first then you can delete subcategory !'), 'Error', ["positionClass" => "toast-top-center"]);
-            return redirect()->route('admin.customer.index');
-        }
-
         DB::beginTransaction();
         try {
-            $category = User::find($id);
-            $category->delete();
+            $customer = User::find($id);
+            if (File::exists('assets/images/customer/' . $customer->image)) {
+                File::delete('assets/images/customer/' . $customer->image);
+            }
+            $customer->delete();
         } catch (\Exception $e) {
             DB::rollback();
-            Toastr::error(trans('Category not Deleted !'), 'Error', ["positionClass" => "toast-top-center"]);
+            Toastr::error(trans('Customer not Deleted !'), 'Error', ["positionClass" => "toast-top-center"]);
             return redirect()->route('admin.customer.index');
         }
         DB::commit();
-        Toastr::success(trans('Category Deleted Successfully !'), 'Success', ["positionClass" => "toast-top-center"]);
+        Toastr::success(trans('Customer Deleted Successfully !'), 'Success', ["positionClass" => "toast-top-center"]);
         return redirect()->route('admin.customer.index');
     }
 
-
-
-
+    public function view($id){
+        if (is_null($this->user) ||!$this->user->can('admin.customer.view')) {
+            abort(403, 'Sorry!! You are Unauthorized.');
+        }
+        $data['title'] = 'Customer View';
+        $data['user'] = User::find($id);
+        return view('admin.customer.view', compact('data'));
+    }
 
 }

@@ -97,8 +97,6 @@ Route::get('/smtp',[MailController::class,'mailview'])->name('settings.Smtp.mail
         Route::get('delete', 'FaqController@delete')->name('delete');
     });
 
-
-
     // Account Setting
     // Route::get('account', ['as'=>'account','uses'=>'AccountController@account']);
     // Route::get('edit-account', ['as'=>'edit.account','uses'=>'AccountController@editAccount']);
@@ -178,13 +176,14 @@ Route::get('/smtp',[MailController::class,'mailview'])->name('settings.Smtp.mail
     Route::get('user/trash-list', 'UserController@getTrashList')->name('user.trash-list');
 
 
-    // industry
+    // Customers
     Route::group(['prefix' => 'customer', 'as' => 'customer.'], function () {
         Route::get('/', 'CustomerController@index')->name('index');
         Route::get('create', 'CustomerController@create')->name('create');
         Route::post('store', 'CustomerController@store')->name('store');
         Route::get('{id}/edit', 'CustomerController@edit')->name('edit');
         Route::post('{id}/update', 'CustomerController@update')->name('update');
+        Route::get('{id}/view', 'CustomerController@view')->name('view');
         Route::get('{id}/delete', 'CustomerController@delete')->name('delete');
     });
 

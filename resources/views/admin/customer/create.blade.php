@@ -4,20 +4,8 @@
 @section('title') {{ $data['title'] ?? '' }} @endsection
 
 @push('style')
-<style>
-        .custom-img {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 5px;
-    width: 100px;
-    height: 90px;
-    }
-</style>
+
 @endpush
-@php
-     $user = $data['user'];
-    $role = $data['role'];
-@endphp
 @section('content')
 <div class="content-wrapper">
     <div class="content-header">
@@ -57,24 +45,19 @@
                         </div>
 
                         <div class="card-body table-responsive p-4">
-                            <form action="{{ route('admin.customer.update',$user->id) }}" method="post" enctype="multipart/form-data">
+                            <form action="{{ route('admin.customer.store') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <label for="image" class="form-lable">Customer Image</label>
                                             <input type="file" name="image" id="image" class="form-control" >
-                                              <img class="custom-img mt-2" src="@if($user->image)
-                                                {{ asset('assets/images/customer/'.$user->image) }}
-                                                @else
-                                                    {{ asset('assets/images/default-user.png') }}
-                                              @endif" alt="Paris" width="60" height="80">
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label for="name" class="form-lable">Customer Name</label>
-                                            <input type="text" name="name" value="{{ $user->name }}" id="name" class="form-control" required>
+                                            <input type="text" name="name" id="name" class="form-control" required>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
@@ -82,8 +65,8 @@
                                             <label for="role_id" class="form-lable">Customer Role</label>
                                             <select name="role_id" id="role_id" class="form-control" required>
                                                  <option value="" class="d-none">-- Select Role --</option>
-                                                @foreach($role as $role)
-                                                    <option value="{{ $role->id }}" {{ $user->role_id == $role->id? "selected" : "" }}>{{ $role->name }}</option>
+                                                @foreach($data['roles'] as $role)
+                                                    <option value="{{ $role->id }}">{{ $role->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -91,34 +74,34 @@
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label for="email" class="form-lable">Customer Email</label>
-                                            <input type="email" name="email" value="{{ $user->email }}"  id="email" class="form-control" required>
+                                            <input type="email" name="email" id="email" class="form-control" required>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label for="password" class="form-lable">Customer Password</label>
-                                            <input type="password" name="password" value="" id="password" class="form-control" >
+                                            <input type="password" name="password" id="password" class="form-control" required>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label for="phone" class="form-lable">Customer Phone</label>
-                                            <input type="text" name="phone" id="phone" value="{{ $user->phone }}"  class="form-control" required>
+                                            <input type="text" name="phone" id="phone" class="form-control" required>
                                         </div>
                                     </div>
                                      <div class="col-lg-4">
                                         <div class="form-group">
                                             <label for="status" class="form-lable">Published Status</label>
                                             <select name="status" id="status" class="form-control">
-                                                <option value="1" {{ $user->status == 1? "selected" : "" }}>Published</option>
-                                                <option value="0" {{ $user->status == 0? "selected" : "" }}>Unpublished</option>
+                                                <option value="1">Published</option>
+                                                <option value="0">Unpublished</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <label for="address" class="form-lable">Customer Address</label>
-                                            <input type="text" name="address" value="{{ $user->address }}" id="address" class="form-control" required>
+                                            <input type="text" name="address" id="address" class="form-control" required>
                                         </div>
                                     </div>
                                    
@@ -136,9 +119,6 @@
         </div>
     </div>
 </div>
-
-
-
 @endsection
 
 
