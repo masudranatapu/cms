@@ -272,5 +272,39 @@ Route::get('/smtp',[MailController::class,'mailview'])->name('settings.Smtp.mail
     });
 
 
+    //Country
+    Route::group(['prefix' => 'country', 'as' => 'country.'], function () {
+        Route::get('/', 'CountryController@index')->name('index');
+        Route::get('create', 'CountryController@create')->name('create');
+        Route::post('store', 'CountryController@store')->name('store');
+        Route::get('{id}/edit', 'CountryController@edit')->name('edit');
+        Route::post('{id}/update', 'CountryController@update')->name('update');
+        Route::get('{id}/view', 'CountryController@view')->name('view');
+        Route::get('{id}/delete', 'CountryController@delete')->name('delete');
+    });
+
+    //Region
+    Route::group(['prefix' => 'region', 'as' => 'region.'], function () {
+        Route::get('/', 'RegionController@index')->name('index');
+        Route::get('create', 'RegionController@create')->name('create');
+        Route::post('store', 'RegionController@store')->name('store');
+        Route::get('{id}/edit', 'RegionController@edit')->name('edit');
+        Route::post('{id}/update', 'RegionController@update')->name('update');
+        Route::get('{id}/view', 'RegionController@view')->name('view');
+        Route::get('{id}/delete', 'RegionController@delete')->name('delete');
+    });
+
+    //City
+    Route::group(['prefix' => 'city', 'as' => 'city.'], function () {
+        Route::get('/', 'CityController@index')->name('index');
+        Route::get('create', 'CityController@create')->name('create');
+        Route::post('store', 'CityController@store')->name('store');
+        Route::get('{id}/edit', 'CityController@edit')->name('edit');
+        Route::post('{id}/update', 'CityController@update')->name('update');
+        Route::get('{id}/view', 'CityController@view')->name('view');
+        Route::get('{id}/delete', 'CityController@delete')->name('delete');
+    });
+
+
 
 });

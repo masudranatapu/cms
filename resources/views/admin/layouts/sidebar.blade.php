@@ -184,6 +184,43 @@
 
 
 
+
+                <li class="nav-item @yield('location_menu') ">
+                    <a href="#" class="nav-link ">
+                        <i class="nav-icon far fa-envelope"></i>
+                        <p>Location<i class="fas fa-angle-left right"></i></p>
+                    </a>
+
+                    <ul class="nav nav-treeview @yield('location_menu')">
+                    @if (Auth::user()->can('admin.country.index'))
+                        <li class="nav-item">
+                            <a href="{{ route('admin.country.index') }}"
+                                class="nav-link @yield('country')">
+                                <i class="fas fa-cog nav-icon"></i>
+                                <p>Country</p>
+                            </a>
+                        </li>
+                    @endif
+                    @if (Auth::user()->can('admin.region.index'))
+                        <li class="nav-item">
+                            <a href="{{ route('admin.region.index') }}" class="nav-link @yield('region')">
+                                <i class="fas fa-globe nav-icon"></i>
+                                <p>Region</p>
+                            </a>
+                        </li>
+                    @endif
+                    @if (Auth::user()->can('admin.city.index'))
+                        <li class="nav-item">
+                            <a href="{{ route('admin.city.index') }}" class="nav-link @yield('city')">
+                                <i class="fas fa-globe nav-icon"></i>
+                                <p>City</p>
+                            </a>
+                        </li>
+                    @endif
+
+                    </ul>
+                </li>
+
                 <li class="nav-item @yield('settings_menu') ">
                     <a href="{{ route('admin.settings') }}" class="nav-link ">
                         <i class="nav-icon far fa-envelope"></i>
@@ -228,6 +265,8 @@
 
                     </ul>
                 </li>
+
+
                 <li class="nav-item"><a href="{{ route('admin.user.index') }}" class="nav-link @yield('admin-user')"><i
                             class=" fa fa-book"></i> {{ __('Admin User & Role') }}</a></li>
 
